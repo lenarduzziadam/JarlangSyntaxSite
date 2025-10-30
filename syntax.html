@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarlang Syntax Reference</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .syntax-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .syntax-item h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        .code {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .description {
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚔️ Jarlang Syntax Reference</h1>
+
+    <div id="content">
+        <!-- JavaScript will add syntax items here -->
+    </div>
+
+    <script>
+        // Your syntax data
+        const syntax = [
+            {
+                title: "Variables",
+                code: "wield x 10",
+                description: "Declare variables with wield"
+            },
+            {
+                title: "Print",
+                code: "chant \"Hello\"",
+                description: "Output with chant"
+            },
+            {
+                title: "Functions",
+                code: "forge add(a, b)\n  mend a + b",
+                description: "Create functions with forge, return with mend"
+            }
+        ];
+
+        // Get the content div
+        const content = document.getElementById('content');
+
+        // Loop through each syntax item and add it to the page
+        for (let i = 0; i < syntax.length; i++) {
+            const item = syntax[i];
+            
+            // Create a div for this item
+            const div = document.createElement('div');
+            div.className = 'syntax-item';
+            
+            // Add the HTML content
+            div.innerHTML = `
+                <h2>${item.title}</h2>
+                <div class="code">${item.code}</div>
+                <div class="description">${item.description}</div>
+            `;
+            
+            // Add it to the page
+            content.appendChild(div);
+        }
+    </script>
+</body>
+</html>
