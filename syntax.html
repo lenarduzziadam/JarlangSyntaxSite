@@ -58,19 +58,25 @@
         const syntax = [
             {
                 title: "Variables",
-                code: "wield x 10",
-                description: "Declare variables with wield"
+                code: "wield x 10\n# or\n x = 10\n\n wield \<variable name\> \<value\> \n# or\n \<variable name\> = \<value\>",
+                description: "Declare variables with wield or assign a value to a variable (works the same as wield assigning a value)\n '=' Does not work with vow/sacred variables"
             },
             {
                 title: "Print",
-                code: "chant \"Hello\"",
-                description: "Output with chant"
+                code: "chant \"Hello\" \n\n chant \<variable name/string/number/evaluate expression\>",
+                description: "Output with chant: chant is a function that takes a string or number and \nprints it to the console"
             },
             {
                 title: "Functions",
-                code: "forge add(a, b)\n  mend a + b",
-                description: "Create functions with forge, return with mend"
+                code: "forge add(a, b){\n    mend a + b\n}\n\nforge \<function name\>(arguments){\n    \<code block\>\n}",
+                description: "Create functions with forge, return with mend\n The add function takes two arguments, a and b, and returns the sum of a and b"
+            },
+            {
+                title: "Conditions",
+                code: "judge x > 10 { \n    chant \"x is greater than 10\" \n} orjudge { \n    chant \"x is less than or equal to 10\" \n}",
+                description: "Conditions are used to check if a statement is true or false then execute the code block"
             }
+
         ];
 
         // Get the content div
