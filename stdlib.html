@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarlang Standard Library</title>
+    <style>
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+            }
+            .navbar {
+                display: flex;
+                justify-content: center;
+                background: #667eea;
+                padding: 10px 0;
+                border-radius: 0 0 8px 8px;
+                margin-bottom: 0;
+            }
+            .navbar a {
+                color: white;
+                text-decoration: none;
+                margin: 0 20px;
+                font-weight: bold;
+                font-size: 18px;
+            }
+            .navbar a:hover {
+                text-decoration: underline;
+            }
+            .container {
+                display: flex;
+                max-width: 1200px;
+                margin: 40px auto;
+                gap: 32px;
+            }
+            .sidebar {
+                min-width: 220px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+                padding: 24px 16px;
+                height: fit-content;
+                position: sticky;
+                top: 32px;
+            }
+            .sidebar h3 {
+                font-size: 1.1em;
+                margin-bottom: 12px;
+                color: #667eea;
+            }
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+            .sidebar li {
+                margin-bottom: 10px;
+            }
+            .sidebar a {
+                color: #333;
+                text-decoration: none;
+                font-size: 1em;
+            }
+            .sidebar a:hover {
+                color: #667eea;
+            }
+            .main-content {
+                flex: 1;
+                background: white;
+                padding: 32px 32px 32px 32px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            }
+            h1 {
+                color: #333;
+                text-align: left;
+                font-size: 2.2em;
+                margin-bottom: 10px;
+            }
+            h2 {
+                color: #667eea;
+                margin-top: 32px;
+                font-size: 1.5em;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 16px;
+                margin-bottom: 24px;
+            }
+            th, td {
+                border: 1px solid #e0e0e0;
+                padding: 10px 8px;
+                text-align: left;
+            }
+            th {
+                background: #f7f7fa;
+                color: #667eea;
+                font-weight: 600;
+            }
+            .constant-table td {
+                font-family: monospace;
+            }
+            .code {
+                background: #f0f0f0;
+                padding: 10px;
+                border-radius: 4px;
+                font-family: monospace;
+                white-space: pre;
+                overflow-x: auto;
+                margin-bottom: 16px;
+            }
+            @media (max-width: 900px) {
+                .container {
+                    flex-direction: column;
+                    gap: 0;
+                }
+                .sidebar {
+                    margin-bottom: 24px;
+                    position: static;
+                }
+            }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="syntax.html">Syntax</a>
+        <a href="stdlib.html">Standard Library</a>
+        <a href="testlib.html">Test Library</a>
+    </nav>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Library Sections</h3>
+            <ul>
+                <li><a href="#numeric">Numeric Utilities</a></li>
+                <li><a href="#advanced">Advanced Numerics</a></li>
+                <li><a href="#string">String Helpers</a></li>
+                <li><a href="#constants">Constants</a></li>
+                <li><a href="#physics">Physics & Utility</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <h1>🛡️ Jarlang Standard Library</h1>
+            <p>This page documents the functions and constants available in <code>stdlib.vase</code> for Jarlang.</p>
+            <h2 id="numeric">Numeric Utilities</h2>
+            <table>
+                <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                <tr><td>max</td><td>max(a, b)</td><td>Returns the greater of two values.</td></tr>
+                <tr><td>min</td><td>min(a, b)</td><td>Returns the lesser of two values.</td></tr>
+                <tr><td>clamp</td><td>clamp(x, lo, hi)</td><td>Restricts <code>x</code> to the range <code>[lo, hi]</code>.</td></tr>
+                <tr><td>commune</td><td>commune(a, b)</td><td>Adds two numbers.</td></tr>
+                <tr><td>banish</td><td>banish(a, b)</td><td>Subtracts <code>b</code> from <code>a</code>.</td></tr>
+                <tr><td>rally</td><td>rally(a, b)</td><td>Multiplies two numbers.</td></tr>
+                <tr><td>slash</td><td>slash(a, b)</td><td>Divides <code>a</code> by <code>b</code>.</td></tr>
+                <tr><td>ascend</td><td>ascend(a, b)</td><td>Raises <code>a</code> to the power <code>b</code>.</td></tr>
+                <tr><td>circle_area</td><td>circle_area(r)</td><td>Calculates the area of a circle with radius <code>r</code>.</td></tr>
+                <tr><td>add1</td><td>add1(x)</td><td>Increments <code>x</code> by 1.</td></tr>
+            </table>
+
+            <h2 id="advanced">Advanced Numerics</h2>
+            <table>
+                <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                <tr><td>fact</td><td>fact(n)</td><td>Computes the factorial of <code>n</code>.</td></tr>
+                <tr><td>fib</td><td>fib(n)</td><td>Computes the <code>n</code>th Fibonacci number.</td></tr>
+                <tr><td>mean2</td><td>mean2(a, b)</td><td>Returns the mean of <code>a</code> and <code>b</code>.</td></tr>
+                <tr><td>abs</td><td>abs(x)</td><td>Returns the absolute value of <code>x</code>.</td></tr>
+                <tr><td>sumTo</td><td>sumTo(n)</td><td>Returns the sum of all integers from 1 to <code>n</code>.</td></tr>
+                <tr><td>approx_equal</td><td>approx_equal(a, b, eps)</td><td>Checks if <code>a</code> and <code>b</code> are approximately equal within <code>eps</code>.</td></tr>
+                <tr><td>gcd</td><td>gcd(a, b)</td><td>Computes the greatest common divisor of <code>a</code> and <code>b</code>.</td></tr>
+                <tr><td>lcm</td><td>lcm(a, b)</td><td>Computes the least common multiple of <code>a</code> and <code>b</code>.</td></tr>
+                <tr><td>hypot</td><td>hypot(a, b)</td><td>Returns the hypotenuse for sides <code>a</code> and <code>b</code>.</td></tr>
+                <tr><td>pow_int</td><td>pow_int(a, n)</td><td>Raises <code>a</code> to the integer power <code>n</code>.</td></tr>
+                <tr><td>invert_sign</td><td>invert_sign(n)</td><td>Returns <code>n</code> with its sign inverted.</td></tr>
+                <tr><td>mod</td><td>mod(a, b)</td><td>Returns <code>a</code> modulo <code>b</code>.</td></tr>
+                <tr><td>sign</td><td>sign(x)</td><td>Returns -1, 0, or 1 depending on the sign of <code>x</code>.</td></tr>
+                <tr><td>sqrt</td><td>sqrt(x)</td><td>Returns the square root of <code>x</code>.</td></tr>
+                <tr><td>map_range</td><td>map_range(x, inMin, inMax, outMin, outMax)</td><td>Maps <code>x</code> from one range to another.</td></tr>
+                <tr><td>is_even</td><td>is_even(n)</td><td>Returns 1 if <code>n</code> is even, else 0.</td></tr>
+                <tr><td>is_odd</td><td>is_odd(n)</td><td>Returns 1 if <code>n</code> is odd, else 0.</td></tr>
+                <tr><td>is_prime</td><td>is_prime(n)</td><td>Returns 1 if <code>n</code> is prime, else 0.</td></tr>
+                <tr><td>deg2rad</td><td>deg2rad(d)</td><td>Converts degrees to radians.</td></tr>
+                <tr><td>rad2deg</td><td>rad2deg(r)</td><td>Converts radians to degrees.</td></tr>
+                <tr><td>abs_int</td><td>abs_int(x)</td><td>Returns the absolute value of <code>x</code> as an integer.</td></tr>
+                <tr><td>safe_lcm</td><td>safe_lcm(a, b)</td><td>Computes the LCM of <code>a</code> and <code>b</code> safely (handles zero).</td></tr>
+            </table>
+
+            <h2 id="string">String Helpers</h2>
+            <table>
+                <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                <tr><td>concat</td><td>concat(a, b)</td><td>Concatenates two values as strings.</td></tr>
+                <tr><td>tale_repeat</td><td>tale_repeat(s, n)</td><td>Repeats string <code>s</code> <code>n</code> times.</td></tr>
+                <tr><td>barren_tale</td><td>barren_tale(s)</td><td>Returns 1 if string <code>s</code> is empty, else 0.</td></tr>
+            </table>
+
+            <h2 id="constants">Constants</h2>
+            <table class="constant-table">
+                <tr><th>Name</th><th>Value</th><th>Description</th></tr>
+                <tr><td>KELVIN_OFFSET</td><td>273.15</td><td>Offset for Celsius to Kelvin conversion.</td></tr>
+                <tr><td>G_SI</td><td>9.80665</td><td>Standard gravity (m/s²).</td></tr>
+                <tr><td>G_CONST</td><td>6.67430 × 10⁻¹¹</td><td>Gravitational constant.</td></tr>
+                <tr><td>EARTH_MASS</td><td>5.972 × 10²⁴</td><td>Earth's mass (kg).</td></tr>
+            </table>
+
+            <h2 id="physics">Physics & Utility Functions</h2>
+            <table>
+                <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                <tr><td>potential_energy</td><td>potential_energy(m, h)</td><td>Calculates potential energy <code>m * g * h</code>.</td></tr>
+                <tr><td>celsius_to_kelvin</td><td>celsius_to_kelvin(c)</td><td>Converts Celsius to Kelvin.</td></tr>
+                <tr><td>kelvin_to_celsius</td><td>kelvin_to_celsius(k)</td><td>Converts Kelvin to Celsius.</td></tr>
+                <tr><td>orbital_period_years</td><td>orbital_period_years(a_AU)</td><td>Approximates orbital period in years for semi-major axis in AU.</td></tr>
+                <tr><td>orbital_period_seconds</td><td>orbital_period_seconds(a_meters)</td><td>Calculates orbital period (seconds) for radius in meters around Earth.</td></tr>
+                <tr><td>approx_equal_tol</td><td>approx_equal_tol(a, b)</td><td>Checks if <code>a</code> and <code>b</code> are approximately equal using a local tolerance.</td></tr>
+            </table>
+        </main>
+    </div>
+</body>
+</html>
