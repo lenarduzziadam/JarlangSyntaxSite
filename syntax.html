@@ -13,6 +13,25 @@
             background-color: #f5f5f5;
         }
 
+            .navbar {
+                display: flex;
+                justify-content: center;
+                background: #667eea;
+                padding: 10px 0;
+                border-radius: 8px;
+                margin-bottom: 30px;
+            }
+            .navbar a {
+                color: white;
+                text-decoration: none;
+                margin: 0 20px;
+                font-weight: bold;
+                font-size: 18px;
+            }
+            .navbar a:hover {
+                text-decoration: underline;
+            }
+
         h1 {
             color: #333;
             text-align: center;
@@ -47,11 +66,129 @@
     </style>
 </head>
 <body>
+
+    <nav class="navbar">
+        <a href="syntax.html">Syntax</a>
+        <a href="stdlib.html">Standard Library</a>
+        <a href="testlib.html">Test Library</a>
+    </nav>
     <h1>⚔️ Jarlang Syntax Reference</h1>
 
     <div id="content">
         <!-- JavaScript will add syntax items here -->
     </div>
+        <section class="syntax-item">
+            <h2>What is Jarlang?</h2>
+            <div class="description">
+                Jarlang is a small, warrior-themed expression language and learning interpreter implemented in Java. It uses themed keywords (forge, wield, chant, summon, judge, lest, mend) and provides familiar arithmetic, control flow, functions, and a small standard library.
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Lexical Elements</h2>
+            <div class="description">
+                <ul>
+                    <li><strong>Comments:</strong> <code>#</code> for single-line comments</li>
+                    <li><strong>Identifiers:</strong> Letters, digits, and <code>_</code>, must start with a letter</li>
+                    <li><strong>Strings:</strong> Double-quoted, e.g. <code>"Hello"</code></li>
+                    <li><strong>Numbers:</strong> Integers and floats</li>
+                    <li><strong>Tokens:</strong> <br>
+                        Arithmetic: <code>+</code> (commune), <code>-</code> (banish), <code>*</code> (rally), <code>/</code> (slash), <code>^</code> (ascend)<br>
+                        Comparison: <code>==</code>, <code>!=</code>, <code><</code>, <code>></code>, <code><=</code>, <code>>=</code><br>
+                        Assignment: <code>=</code> (bind)<br>
+                        Grouping: <code>( )</code> and <code>{ }</code><br>
+                        Delimiters: <code>,</code> <code>:</code> <code>;</code>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Themed Keywords</h2>
+            <div class="description">
+                <ul>
+                    <li><code>wield</code> — declare a variable (<code>wield x 10</code>)</li>
+                    <li><code>forge</code> — begin a function definition (<code>forge add(a, b) ...</code>)</li>
+                    <li><code>mend</code> — return from a function or end a single-line <code>judge</code> branch</li>
+                    <li><code>chant</code> — print/output expression</li>
+                    <li><code>summon</code> — import another <code>.vase</code> file</li>
+                    <li><code>judge</code> — if/conditional branch</li>
+                    <li><code>orjudge</code> — else-if/chained conditional branch</li>
+                    <li><code>lest</code> — while loop</li>
+                    <li><code>gather</code>/<code>disperse</code> — parentheses (internal naming)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Statements & Control Flow</h2>
+            <div class="description">
+                <ul>
+                    <li><strong>Variable declaration:</strong> <code>wield &lt;name&gt; &lt;expression&gt;</code></li>
+                    <li><strong>Assignment:</strong> <code>&lt;name&gt; = &lt;expression&gt;</code></li>
+                    <li><strong>Print:</strong> <code>chant &lt;expression&gt;</code></li>
+                    <li><strong>Blocks:</strong> <code>{ ... }</code> for grouped statements</li>
+                    <li><strong>If / elif / else:</strong> <br>
+                        <code>judge &lt;condition&gt; mend &lt;expr-or-block&gt; [orjudge &lt;condition&gt; mend &lt;expr-or-block&gt;]... </code>
+                    </li>
+                    <li><strong>While loop:</strong> <code>lest &lt;condition&gt; { &lt;statements&gt; }</code></li>
+                </ul>
+            </div>
+            <div class="code">
+    judge x > 0 mend
+        chant "positive"
+    orjudge x == 0 mend
+        chant "zero"
+    orjudge mend
+        chant "negative"
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Functions</h2>
+            <div class="description">
+                <ul>
+                    <li><strong>Define:</strong> <code>forge add(a, b) mend a + b</code></li>
+                    <li><strong>Return:</strong> <code>mend &lt;expression&gt;</code> inside a function</li>
+                    <li><strong>Call:</strong> <code>chant add(2, 3)</code></li>
+                </ul>
+            </div>
+            <div class="code">
+    forge greet(name)
+        mend "Hello, " + name
+
+    chant greet("Adam")  # Hello, Adam
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Imports</h2>
+            <div class="description">
+                <code>summon "stdlib.vase"</code> executes another file and injects its top-level definitions into the current context.
+            </div>
+            <div class="code">
+    summon "stdlib.vase"
+    chant commune(3, 4)  # 7.0
+            </div>
+        </section>
+
+        <section class="syntax-item">
+            <h2>Examples</h2>
+            <div class="description">
+                <strong>Conditional and loops:</strong>
+            </div>
+            <div class="code">
+    wield n 5
+    judge n <= 1 mend
+        chant "trivial"
+    orjudge mend
+        wield i 0
+        lest i < n {
+            chant i
+            i = i + 1
+        }
+            </div>
+        </section>
 
     <script>
         // Your syntax data
