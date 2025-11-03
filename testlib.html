@@ -6,19 +6,18 @@
     <title>Jarlang Test Library</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
         }
         .navbar {
             display: flex;
             justify-content: center;
             background: #667eea;
             padding: 10px 0;
-            border-radius: 8px;
-            margin-bottom: 30px;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
         }
         .navbar a {
             color: white;
@@ -30,23 +29,107 @@
         .navbar a:hover {
             text-decoration: underline;
         }
-        h1 {
-            color: #333;
-            text-align: center;
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            gap: 32px;
         }
-        .library-content {
-            background: white;
-            padding: 20px;
+        .sidebar {
+            min-width: 220px;
+            background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px 16px;
+            height: fit-content;
+            position: sticky;
+            top: 32px;
+        }
+        .sidebar h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .sidebar a:hover {
+            color: #667eea;
+        }
+        .main-content {
+            flex: 1;
+            background: white;
+            padding: 32px 32px 32px 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .page-header h1 {
+            margin: 0;
+        }
+        .mascot-img {
+            height: 80px;
+            width: auto;
+            margin-left: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #fff;
+        }
+        h2 {
+            color: #667eea;
+            margin-top: 32px;
+            font-size: 1.5em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            text-align: left;
+        }
+        th {
+            background: #f7f7fa;
+            color: #667eea;
+            font-weight: 600;
         }
         .code {
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
-            font-family: monospace;
+            background: #23272e;
+            color: #e3eaf2;
+            padding: 14px;
+            border-radius: 6px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
             white-space: pre;
             overflow-x: auto;
+            margin-bottom: 16px;
+            font-size: 1em;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 0;
+            }
+            .sidebar {
+                margin-bottom: 24px;
+                position: static;
+            }
         }
     </style>
 </head>
@@ -54,15 +137,64 @@
     <nav class="navbar">
         <a href="syntax.html">Syntax</a>
         <a href="stdlib.html">Standard Library</a>
-        <a href="testlib.html">Test Library</a>
+    <a href="testlib.html">Test Library</a>
+    <a href="howto.html">How-To Guide</a>
     </nav>
-    <h1>🧪 Jarlang Test Library</h1>
-    <div class="library-content">
-        <h2>About testlib.vase</h2>
-        <p>This file contains the test library functions for Jarlang. Below is a preview of its contents:</p>
-        <div class="code">
-<!-- You can add a summary or sample of testlib.vase here, or copy its contents -->
-        </div>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Test Library Sections</h3>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#counters">Test Counters</a></li>
+                <li><a href="#assertions">Assertions</a></li>
+                <li><a href="#helpers">Helpers</a></li>
+                <li><a href="#summary">Summary & Reset</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>🧪 Jarlang Test Library</h1>
+                <img src="jarlang_resources/jarknight_final_glaze.png" alt="JarKnight Mascot" class="mascot-img" />
+            </div>
+            <section id="about">
+                <h2>About testlib.vase</h2>
+                <p>This file contains the test library functions for Jarlang. It provides basic assertion helpers, pass/fail counters, and reporting for test suites.</p>
+            </section>
+            <section id="counters">
+                <h2>Test Counters</h2>
+                <table>
+                    <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>TEST_PASSES</td><td>Variable</td><td>Counts the number of passing tests.</td></tr>
+                    <tr><td>TEST_FAILS</td><td>Variable</td><td>Counts the number of failing tests.</td></tr>
+                </table>
+            </section>
+            <section id="assertions">
+                <h2>Assertions</h2>
+                <table>
+                    <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                    <tr><td>assert_eq</td><td>assert_eq(expected, actual, label)</td><td>Checks if <code>expected == actual</code>. Reports pass/fail with label.</td></tr>
+                    <tr><td>assert_ne</td><td>assert_ne(expected, actual, label)</td><td>Checks if <code>expected != actual</code>. Reports pass/fail with label.</td></tr>
+                    <tr><td>assert_true</td><td>assert_true(value, label)</td><td>Checks if <code>value</code> is true (1 or non-empty string). Reports pass/fail with label.</td></tr>
+                    <tr><td>assert_false</td><td>assert_false(value, label)</td><td>Checks if <code>value</code> is false (0 or empty string). Reports pass/fail with label.</td></tr>
+                </table>
+            </section>
+            <section id="helpers">
+                <h2>Helpers</h2>
+                <table>
+                    <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                    <tr><td>report_pass</td><td>report_pass(label)</td><td>Increments <code>TEST_PASSES</code> and prints a pass message.</td></tr>
+                    <tr><td>report_fail</td><td>report_fail(label, expected, actual)</td><td>Increments <code>TEST_FAILS</code> and prints a fail message.</td></tr>
+                </table>
+            </section>
+            <section id="summary">
+                <h2>Summary & Reset</h2>
+                <table>
+                    <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+                    <tr><td>test_summary</td><td>test_summary()</td><td>Prints a summary of passes and fails.</td></tr>
+                    <tr><td>test_reset</td><td>test_reset()</td><td>Resets <code>TEST_PASSES</code> and <code>TEST_FAILS</code> to zero.</td></tr>
+                </table>
+            </section>
+        </main>
     </div>
 </body>
 </html>

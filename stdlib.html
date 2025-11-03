@@ -127,7 +127,8 @@
     <nav class="navbar">
         <a href="syntax.html">Syntax</a>
         <a href="stdlib.html">Standard Library</a>
-        <a href="testlib.html">Test Library</a>
+    <a href="testlib.html">Test Library</a>
+    <a href="howto.html">How-To Guide</a>
     </nav>
     <div class="container">
         <aside class="sidebar">
@@ -141,7 +142,29 @@
             </ul>
         </aside>
         <main class="main-content">
-            <h1>🛡️ Jarlang Standard Library</h1>
+            <div class="page-header">
+                <h1>🛡️ Jarlang Standard Library</h1>
+                <img src="jarlang_resources/jarknight_final_glaze.png" alt="JarKnight Mascot" class="mascot-img" width="70px" />
+            </div>
+            <style>
+                .page-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 10px;
+                }
+                .page-header h1 {
+                    margin: 0;
+                }
+                .mascot-img {
+                    height: 80px;
+                    width: auto;
+                    margin-left: 24px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+                    background: #fff;
+                }
+            </style>
             <p>This page documents the functions and constants available in <code>stdlib.vase</code> for Jarlang.</p>
             <h2 id="numeric">Numeric Utilities</h2>
             <table>
