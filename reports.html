@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarlang Reports & Suggestions</title>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: #667eea;
+            padding: 10px 0;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            gap: 32px;
+        }
+        .sidebar {
+            min-width: 220px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px 16px;
+            height: fit-content;
+            position: sticky;
+            top: 32px;
+        }
+        .sidebar h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .sidebar a:hover {
+            color: #667eea;
+        }
+        .main-content {
+            flex: 1;
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+        }
+        .mascot-img {
+            height: 80px;
+            width: auto;
+            margin-left: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #fff;
+        }
+        .form-section {
+            background: #f8f9fa;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #4fd1c5 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .alert {
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .reports-list {
+            margin-top: 32px;
+        }
+        .report-item {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: box-shadow 0.2s;
+        }
+        .report-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .report-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .report-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .report-type.bug {
+            background: #fee;
+            color: #c53030;
+        }
+        .report-type.feature {
+            background: #e6fffa;
+            color: #234e52;
+        }
+        .report-type.improvement {
+            background: #fef5e7;
+            color: #744210;
+        }
+        .report-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin: 8px 0;
+        }
+        .report-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .report-description {
+            color: #555;
+            line-height: 1.5;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 0;
+                margin: 20px;
+            }
+            .sidebar {
+                margin-bottom: 24px;
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="syntax.html">Syntax</a>
+        <a href="stdlib.html">Standard Library</a>
+        <a href="testlib.html">Test Library</a>
+        <a href="howto.html">How-To Guide</a>
+        <a href="story.html">Story of Jarlang</a>
+        <a href="reports.html">Reports & Suggestions</a>
+    </nav>
+
+    <div id="app">
+        <div class="container">
+            <aside class="sidebar">
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="#submit-report">Submit Report</a></li>
+                    <li><a href="#view-reports">View Reports</a></li>
+                    <li><a href="#feature-requests">Feature Requests</a></li>
+                    <li><a href="#bug-reports">Bug Reports</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <h1>🛡️ Reports & Suggestions</h1>
+                    <img src="jarlang_resources/jarknight_final_glaze.png" alt="JarKnight Mascot" class="mascot-img" />
+                </div>
+
+                    <div v-if="!supabaseConfigured" class="alert alert-error">
+                        <strong>⚠️ Demo Mode:</strong> Supabase is not configured. Reports won't be saved. 
+                        <a href="QUICK_SETUP.md" style="color: #721c24; text-decoration: underline;">See setup guide</a>
+                    </div>
+                    
+                    <div v-if="alert.show" :class="['alert', alert.type]">
+                        {{ alert.message }}
+                    </div>
+
+                <section class="form-section" id="submit-report">
+                    <h2>Submit a Report or Suggestion</h2>
+                    <p>Help improve Jarlang by reporting bugs, suggesting features, or sharing ideas!</p>
+                    
+                    <form @submit.prevent="submitReport">
+                        <div class="form-group">
+                            <label for="type">Report Type</label>
+                            <select v-model="form.type" id="type" required>
+                                <option value="">Select type...</option>
+                                <option value="bug">🐛 Bug Report</option>
+                                <option value="feature">✨ Feature Request</option>
+                                <option value="improvement">🚀 Improvement Suggestion</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input 
+                                v-model="form.title" 
+                                type="text" 
+                                id="title" 
+                                placeholder="Brief description of the issue or suggestion"
+                                required
+                                maxlength="100"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea 
+                                v-model="form.description" 
+                                id="description" 
+                                placeholder="Provide detailed information about the bug, feature request, or improvement..."
+                                required
+                                maxlength="1000"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact">Email (Optional)</label>
+                            <input 
+                                v-model="form.contact" 
+                                type="email" 
+                                id="contact" 
+                                placeholder="your.email@example.com (for follow-up)"
+                            />
+                        </div>
+
+                        <button type="submit" class="btn" :disabled="submitting">
+                            {{ submitting ? 'Submitting...' : 'Submit Report' }}
+                        </button>
+                    </form>
+                </section>
+
+                <section class="reports-list" id="view-reports">
+                    <h2>Recent Reports & Suggestions</h2>
+                    
+                    <div v-if="loading" class="loading">
+                        Loading reports...
+                    </div>
+                    
+                    <div v-else-if="!supabaseConfigured" class="loading">
+                        <strong>Demo Mode:</strong> Configure Supabase to see and save reports.
+                        <br><a href="QUICK_SETUP.md" style="color: #667eea;">View setup guide →</a>
+                    </div>
+                    
+                    <div v-else-if="reports.length === 0" class="loading">
+                        No reports yet. Be the first to contribute!
+                    </div>
+                    
+                    <div v-else>
+                        <div v-for="report in reports" :key="report.id" class="report-item">
+                            <div class="report-header">
+                                <span :class="['report-type', report.type]">{{ report.type }}</span>
+                            </div>
+                            <div class="report-title">{{ report.title }}</div>
+                            <div class="report-meta">
+                                Submitted {{ formatDate(report.created_at) }}
+                            </div>
+                            <div class="report-description">{{ report.description }}</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        // Initialize Supabase (you'll need to replace these with your actual credentials)
+        const supabaseUrl = 'https://iiaytfagmiabwznwxgwx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0';
+        
+        // Check if credentials are configured
+        let supabaseClient = null;
+        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        }
+
+        createApp({
+            data() {
+                return {
+                    form: {
+                        type: '',
+                        title: '',
+                        description: '',
+                        contact: ''
+                    },
+                    reports: [],
+                    loading: false,
+                    submitting: false,
+                    supabaseConfigured: supabaseClient !== null,
+                    alert: {
+                        show: false,
+                        type: '',
+                        message: ''
+                    }
+                };
+            },
+            async mounted() {
+                await this.loadReports();
+            },
+            methods: {
+                async submitReport() {
+                    this.submitting = true;
+                    this.hideAlert();
+
+                    // Demo mode - simulate submission without Supabase
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            this.showAlert('success', 'Demo: Report would be saved (Supabase not configured)');
+                            const demoReport = {
+                                id: Date.now(),
+                                type: this.form.type,
+                                title: this.form.title,
+                                description: this.form.description,
+                                contact: this.form.contact || null,
+                                created_at: new Date().toISOString()
+                            };
+                            this.reports.unshift(demoReport);
+                            this.resetForm();
+                            this.submitting = false;
+                        }, 1000);
+                        return;
+                    }
+
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .insert([
+                                {
+                                    type: this.form.type,
+                                    title: this.form.title,
+                                    description: this.form.description,
+                                    contact: this.form.contact || null,
+                                    created_at: new Date().toISOString()
+                                }
+                            ]);
+
+                        if (error) throw error;
+
+                        this.showAlert('success', 'Thank you! Your report has been submitted successfully.');
+                        this.resetForm();
+                        await this.loadReports();
+                    } catch (error) {
+                        console.error('Error submitting report:', error);
+                        this.showAlert('error', 'Sorry, there was an error submitting your report. Please try again.');
+                    } finally {
+                        this.submitting = false;
+                    }
+                },
+                
+                async loadReports() {
+                    this.loading = true;
+                    
+                    // Demo mode - show sample data
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            this.reports = [
+                                {
+                                    id: 1,
+                                    type: 'feature',
+                                    title: 'Add for loop syntax',
+                                    description: 'It would be great to have a more traditional for loop syntax in addition to the while loop.',
+                                    created_at: new Date(Date.now() - 86400000).toISOString() // 1 day ago
+                                },
+                                {
+                                    id: 2,
+                                    type: 'bug',
+                                    title: 'Error with nested function calls',
+                                    description: 'When calling functions inside other functions, I get an unexpected parsing error.',
+                                    created_at: new Date(Date.now() - 172800000).toISOString() // 2 days ago
+                                },
+                                {
+                                    id: 3,
+                                    type: 'improvement',
+                                    title: 'Better error messages',
+                                    description: 'Error messages could be more descriptive to help with debugging.',
+                                    created_at: new Date(Date.now() - 259200000).toISOString() // 3 days ago
+                                }
+                            ];
+                            this.loading = false;
+                        }, 500);
+                        return;
+                    }
+                    
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .select('*')
+                            .order('created_at', { ascending: false })
+                            .limit(20);
+
+                        if (error) throw error;
+                        
+                        this.reports = data || [];
+                    } catch (error) {
+                        console.error('Error loading reports:', error);
+                        this.showAlert('error', 'Could not load reports. Please refresh the page.');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                resetForm() {
+                    this.form = {
+                        type: '',
+                        title: '',
+                        description: '',
+                        contact: ''
+                    };
+                },
+                
+                showAlert(type, message) {
+                    this.alert = {
+                        show: true,
+                        type: type === 'success' ? 'alert-success' : 'alert-error',
+                        message
+                    };
+                    
+                    setTimeout(() => {
+                        this.hideAlert();
+                    }, 5000);
+                },
+                
+                hideAlert() {
+                    this.alert.show = false;
+                },
+                
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
