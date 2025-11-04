@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Story of Jarlang</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: #667eea;
+            padding: 10px 0;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            gap: 32px;
+        }
+        .sidebar {
+            min-width: 220px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px 16px;
+            height: fit-content;
+            position: sticky;
+            top: 32px;
+        }
+        .sidebar h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .sidebar a:hover {
+            color: #667eea;
+        }
+        .main-content {
+            flex: 1;
+            background: white;
+            padding: 32px 32px 32px 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+        }
+        .mascot-img {
+            height: 80px;
+            width: auto;
+            margin-left: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #fff;
+        }
+        .story-section {
+            background: white;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+        }
+        h2 {
+            color: #667eea;
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 1.5em;
+        }
+        h3 {
+            color: #4fd1c5;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        p {
+            line-height: 1.6;
+            color: #2e2e2e;
+            margin-bottom: 16px;
+        }
+        .mascot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        .mascot-stage {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .mascot-stage:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .mascot-stage img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .mascot-stage h4 {
+            color: #667eea;
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+        }
+        .mascot-stage p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .highlight-box {
+            background: #a5d6ec;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+        .highlight-box h3 {
+            color: black;
+            margin-top: 0;
+        }
+        .quote {
+            background: #e6f7ff;
+            border-left: 4px solid #667eea;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+        .fun-fact {
+            background: #f0fff4;
+            border: 1px solid #4fd1c5;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .fun-fact strong {
+            color: #4fd1c5;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 0;
+                margin: 20px;
+            }
+            .sidebar {
+                margin-bottom: 24px;
+                position: static;
+            }
+            .mascot-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="syntax.html">Syntax</a>
+        <a href="stdlib.html">Standard Library</a>
+        <a href="testlib.html">Test Library</a>
+        <a href="howto.html">How-To Guide</a>
+        <a href="story.html">Story of Jarlang</a>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Story Sections</h3>
+            <ul>
+                <li><a href="#origin">The Origin Story</a></li>
+                <li><a href="#inspiration">Elden Ring Inspiration</a></li>
+                <li><a href="#rubber-duck">The Warrior Jar Debug Companion</a></li>
+                <li><a href="#language-creation">Learning Language Creation</a></li>
+                <li><a href="#mascot-journey">JarKnight's Journey</a></li>
+                <li><a href="#future">What's Next?</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>🏺 The Story of Jarlang</h1>
+                <img src="jarlang_resources/jarknight_final_glaze.png" alt="JarKnight Mascot" class="mascot-img" />
+            </div>
+
+            <section class="story-section" id="origin">
+                <h2>The Origin Story</h2>
+                <p>
+                    Jarlang was born from a unique combination of curiosity about programming language design and an unexpected source of inspiration: the world of <em>Elden Ring</em>. What started as a quest to understand the deeper mechanics of language creation evolved into something much more personal and meaningful.
+                </p>
+                <div class="quote">
+                    "Sometimes the best projects come from the most unexpected combinations of interests and inspirations."
+                </div>
+                <p>
+                    The journey began with a simple question: <strong>"How do programming languages actually work under the hood?"</strong> This curiosity led to exploring interpreters, parsers, and the fascinating world of language design. But what makes Jarlang special isn't just its technical implementation—it's the story behind its warrior-themed syntax and beloved mascot.
+                </p>
+            </section>
+
+            <section class="story-section" id="inspiration">
+                <h2>Elden Ring Inspiration</h2>
+                <p>
+                    The warrior theme of Jarlang draws heavily from the rich lore and aesthetic of <em>Elden Ring</em>. The game's emphasis on perseverance, crafting, and the mystical relationship between warriors and their tools resonated deeply with the programming experience.
+                </p>
+                <div class="highlight-box">
+                    <h3>Why Warriors and Programming?</h3>
+                    <p>Programming is a craft that requires persistence, strategy, and the right tools. Just like a warrior forges their weapons and armor, programmers craft their code with careful attention to detail. The metaphor felt perfect for a language designed to teach and inspire.</p>
+                </div>
+                <p>
+                    Keywords like <code>forge</code> (define functions), <code>wield</code> (declare variables), <code>chant</code> (output), and <code>summon</code> (import) create a cohesive world where programming becomes an adventure. Every line of code tells a story of a digital warrior crafting solutions to complex problems.
+                </p>
+            </section>
+
+            <section class="story-section" id="rubber-duck">
+                <h2>The Warrior Jar Debug Companion</h2>
+                <div class="fun-fact">
+                    <strong>Fun Fact:</strong> Instead of traditional rubber duck debugging, the creator of Jarlang uses a warrior jar plushie from Elden Ring as their debugging companion!
+                </div>
+                <p>
+                    The concept of "rubber duck debugging"—explaining your code problems to an inanimate object to find solutions—is well-known in programming. But why use a rubber duck when you can have a warrior jar? This small, loyal companion from Elden Ring became the perfect debugging partner.
+                </p>
+                <p>
+                    The warrior jar plushie sits on the desk, silently listening to complex programming problems, just like the noble jar warriors in the game. This personal touch influenced the entire aesthetic of Jarlang, leading to the creation of our beloved mascot, JarKnight.
+                </p>
+                <div class="quote">
+                    "Sometimes the best debugging happens when you explain your code to a loyal warrior jar who never judges, only listens."
+                </div>
+            </section>
+
+            <section class="story-section" id="language-creation">
+                <h2>Learning Language Creation</h2>
+                <p>
+                    Jarlang serves as both a learning project and a teaching tool. The goal was to understand every aspect of language creation:
+                </p>
+                <ul>
+                    <li><strong>Lexical Analysis:</strong> How does the computer break down source code into meaningful tokens?</li>
+                    <li><strong>Parsing:</strong> How do we build an abstract syntax tree from those tokens?</li>
+                    <li><strong>Interpretation:</strong> How do we execute the parsed code and manage program state?</li>
+                    <li><strong>Error Handling:</strong> How do we provide helpful feedback when things go wrong?</li>
+                </ul>
+                <p>
+                    By creating Jarlang, these concepts moved from abstract theory to concrete implementation. Every feature—from basic arithmetic to function calls—required deep thinking about language design decisions that most programmers take for granted.
+                </p>
+            </section>
+
+            <section class="story-section" id="mascot-journey">
+                <h2>JarKnight's Journey: From Sketch to Final Design</h2>
+                <p>
+                    The JarKnight mascot didn't appear overnight. Like any good character design, it went through numerous iterations, each building on the last to create our beloved warrior jar companion. Here's the complete evolution:
+                </p>
+                
+                <div class="mascot-gallery">
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_rough.png" alt="JarKnight Rough Sketch" />
+                        <h4>Initial Concept</h4>
+                        <p>The very first rough sketch - capturing the basic idea of a warrior jar with simple shapes and proportions.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_sketch_rough.png" alt="JarKnight Rough Sketch" />
+                        <h4>Rough Sketch</h4>
+                        <p>Refining the concept with more defined features and beginning to establish the character's personality.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_sketch_simple.png" alt="JarKnight Simple Sketch" />
+                        <h4>Simple Sketch</h4>
+                        <p>Cleaning up the lines and establishing the basic proportions that would define JarKnight's iconic look.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_defined_lines.png" alt="JarKnight Defined Lines" />
+                        <h4>Defined Lines</h4>
+                        <p>Adding precision and character details - the warrior jar begins to come to life with crisp, clean linework.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_solid_colors.png" alt="JarKnight Solid Colors" />
+                        <h4>Solid Colors</h4>
+                        <p>The first color pass - establishing the base palette that would make JarKnight warm and approachable.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_more_details.png" alt="JarKnight More Details" />
+                        <h4>Added Details</h4>
+                        <p>Enhancing the design with shadows, highlights, and texture details that give depth and personality.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_greater_finetuning.png" alt="JarKnight Fine Tuning" />
+                        <h4>Fine Tuning</h4>
+                        <p>Polishing the details, adjusting colors, and perfecting the balance between warrior strength and approachable charm.</p>
+                    </div>
+                    
+                    <div class="mascot-stage">
+                        <img src="mascot_progress/jarknight_final_glaze.png" alt="JarKnight Final Glaze" />
+                        <h4>Final Glaze</h4>
+                        <p>The final version - complete with professional polish, perfect colors, and the iconic look that represents Jarlang today.</p>
+                    </div>
+                </div>
+                
+                <p>
+                    Each stage of JarKnight's development reflects the iterative nature of both art and programming. Just like refining code through multiple versions, the mascot evolved from a simple concept to a polished character that embodies the spirit of Jarlang.
+                </p>
+            </section>
+
+            <section class="story-section" id="future">
+                <h2>What's Next?</h2>
+                <p>
+                    Jarlang continues to evolve as both a learning project and a teaching tool. Future plans include:
+                </p>
+                <ul>
+                    <li><strong>Enhanced Error Messages:</strong> Making debugging even more helpful and educational</li>
+                    <li><strong>More Library Functions:</strong> Expanding the standard library with useful utilities</li>
+                    <li><strong>Interactive Tutorials:</strong> Web-based learning experiences with JarKnight as a guide</li>
+                    <li><strong>Community Features:</strong> Ways for learners to share their Jarlang creations</li>
+                </ul>
+                <div class="highlight-box">
+                    <h3>Join the Adventure</h3>
+                    <p>Whether you're learning programming for the first time or exploring language design, Jarlang welcomes all warriors on their coding journey. Every bug fixed, every feature added, and every line of code written contributes to the ongoing story of this unique language.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
