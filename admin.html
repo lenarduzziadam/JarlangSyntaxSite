@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarlang Reports - Admin Panel</title>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Config -->
+    <script src="js/config.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #4fd1c5 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+        }
+        .header p {
+            margin: 0;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 8px;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .section-header {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            color: #333;
+        }
+        .section-content {
+            padding: 20px;
+        }
+        .report-item {
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: #fff;
+        }
+        .report-item.flagged {
+            border-color: #fed7d7;
+            background: #fff5f5;
+        }
+        .report-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .report-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .report-type.bug { background: #fee; color: #c53030; }
+        .report-type.feature { background: #e6fffa; color: #234e52; }
+        .report-type.improvement { background: #fef5e7; color: #744210; }
+        .report-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+        .report-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .report-description {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid #e1e5e9;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-approve {
+            background: #48bb78;
+            color: white;
+        }
+        .btn-approve:hover {
+            background: #38a169;
+        }
+        .btn-reject {
+            background: #f56565;
+            color: white;
+        }
+        .btn-reject:hover {
+            background: #e53e3e;
+        }
+        .btn-unflag {
+            background: #4299e1;
+            color: white;
+        }
+        .btn-unflag:hover {
+            background: #3182ce;
+        }
+        .btn-delete {
+            background: #e53e3e;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #c53030;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .auth-form {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e1e5e9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Simple Authentication -->
+        <div v-if="!authenticated" class="auth-form">
+            <h2>Admin Access</h2>
+            <div v-if="authAlert.show" :class="['alert', authAlert.type]">
+                {{ authAlert.message }}
+            </div>
+            <form @submit.prevent="authenticate">
+                <div class="form-group">
+                    <label>Admin Password:</label>
+                    <input type="password" v-model="password" required>
+                </div>
+                <button type="submit" class="btn btn-approve" style="width: 100%;" :disabled="authenticating">
+                    {{ authenticating ? 'Checking...' : 'Access Admin Panel' }}
+                </button>
+            </form>
+            <p style="font-size: 12px; color: #666; margin-top: 16px;">
+                Current password: "{{ currentAdminPassword }}" (change this in js/config.js!)
+            </p>
+        </div>
+
+        <!-- Admin Panel -->
+        <div v-else class="container">
+            <div class="header">
+                <h1>🛡️ Jarlang Reports - Admin Panel</h1>
+                <p>Review and moderate user-submitted reports</p>
+                <button @click="logout" class="logout-btn">
+                    Logout
+                </button>
+            </div>
+
+            <div v-if="alert.show" :class="['alert', alert.type]">
+                {{ alert.message }}
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ totalReports }}</div>
+                    <div class="stat-label">Total Reports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ pendingReports }}</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ approvedReports }}</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ rejectedReports }}</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+
+            <!-- Pending Review -->
+            <div class="section">
+                <div class="section-header">
+                    🚩 Reports Pending Review ({{ pendingReviewReports.length }})
+                </div>
+                <div class="section-content">
+                    <div v-if="loading" class="loading">Loading reports...</div>
+                    <div v-else-if="pendingReviewReports.length === 0" class="loading">
+                        No reports pending review 🎉
+                    </div>
+                    <div v-else>
+                        <div v-for="report in pendingReviewReports" :key="report.id" class="report-item flagged">
+                            <div class="report-header">
+                                <span :class="['report-type', report.type]">{{ report.type }}</span>
+                                <span style="font-size: 12px; color: #c53030;">
+                                    FLAGGED {{ report.flagged_at ? formatDate(report.flagged_at) : 'at unknown time' }}
+                                </span>
+                            </div>
+                            <div class="report-title">{{ report.title }}</div>
+                            <div class="report-meta">
+                                Submitted {{ formatDate(report.created_at) }}
+                                <span v-if="report.contact"> • Contact: {{ report.contact }}</span>
+                            </div>
+                            <div class="report-description">{{ report.description }}</div>
+                            <div class="admin-actions">
+                                <button @click="approveReport(report)" class="btn btn-approve" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '✓ Approve' }}
+                                </button>
+                                <button @click="rejectReport(report)" class="btn btn-reject" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '✗ Reject' }}
+                                </button>
+                                <button @click="unflagReport(report)" class="btn btn-unflag" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '🚩 Remove Flag' }}
+                                </button>
+                                <button @click="deleteReport(report)" class="btn btn-delete" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '🗑️ Delete' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="section">
+                <div class="section-header">
+                    📊 Recent Reports ({{ recentReports.length }})
+                </div>
+                <div class="section-content">
+                    <div v-if="recentReports.length === 0" class="loading">
+                        No recent reports
+                    </div>
+                    <div v-else>
+                        <div v-for="report in recentReports" :key="report.id" class="report-item">
+                            <div class="report-header">
+                                <span :class="['report-type', report.type]">{{ report.type }}</span>
+                                <span style="font-size: 12px; color: #28a745;" v-if="report.status === 'approved'">APPROVED</span>
+                                <span style="font-size: 12px; color: #dc3545;" v-if="report.status === 'rejected'">REJECTED</span>
+                            </div>
+                            <div class="report-title">{{ report.title }}</div>
+                            <div class="report-meta">
+                                Submitted {{ formatDate(report.created_at) }}
+                            </div>
+                            <div class="report-description">{{ report.description }}</div>
+                            <div class="admin-actions">
+                                <button @click="deleteReport(report)" class="btn btn-delete" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '🗑️ Delete' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        // Initialize Supabase using config
+        const supabaseClient = window.supabaseConfig.getSupabaseClient();
+        const supabaseConfigured = window.supabaseConfig.isConfigured();
+        
+        // Log environment info
+        window.supabaseConfig.logEnvironment();
+
+        createApp({
+            data() {
+                return {
+                    authenticated: false,
+                    password: '',
+                    authenticating: false,
+                    authAlert: { show: false, type: '', message: '' },
+                    reports: [],
+                    loading: false,
+                    alert: { show: false, type: '', message: '' }
+                };
+            },
+            computed: {
+                totalReports() { return this.reports.length; },
+                pendingReports() { return this.reports.filter(r => r.status === 'pending_review').length; },
+                approvedReports() { return this.reports.filter(r => r.status === 'approved').length; },
+                rejectedReports() { return this.reports.filter(r => r.status === 'rejected').length; },
+                pendingReviewReports() { return this.reports.filter(r => r.status === 'pending_review'); },
+                recentReports() { return this.reports.filter(r => r.status !== 'pending_review').slice(0, 10); },
+                currentAdminPassword() { return window.supabaseConfig ? window.supabaseConfig.getAdminPassword() : 'admin123'; }
+            },
+            async mounted() {
+                // Check if already authenticated
+                if (localStorage.getItem('jarlang_admin_auth') === 'true') {
+                    this.authenticated = true;
+                    await this.loadReports();
+                }
+            },
+            methods: {
+                authenticate() {
+                    this.authenticating = true;
+                    
+                    // Simple password check (in production, use proper authentication)
+                    setTimeout(() => {
+                        if (this.password === window.supabaseConfig.getAdminPassword()) {
+                            this.authenticated = true;
+                            localStorage.setItem('jarlang_admin_auth', 'true');
+                            this.loadReports();
+                        } else {
+                            this.showAuthAlert('error', 'Invalid password');
+                        }
+                        this.authenticating = false;
+                    }, 1000);
+                },
+                
+                logout() {
+                    this.authenticated = false;
+                    this.password = '';
+                    localStorage.removeItem('jarlang_admin_auth');
+                },
+                
+                async loadReports() {
+                    this.loading = true;
+                    
+                    if (!supabaseClient) {
+                        // Demo data
+                        this.reports = [
+                            {
+                                id: 1, type: 'bug', title: 'Inappropriate language in title',
+                                description: 'This report contains inappropriate content that needs review.',
+                                created_at: new Date().toISOString(), status: 'pending_review',
+                                flagged: true, flagged_at: new Date().toISOString()
+                            },
+                            {
+                                id: 2, type: 'feature', title: 'Add new syntax feature',
+                                description: 'Would love to see more syntax options.',
+                                created_at: new Date(Date.now() - 86400000).toISOString(),
+                                status: 'approved', flagged: false
+                            }
+                        ];
+                        this.loading = false;
+                        return;
+                    }
+                    
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                            
+                        if (error) throw error;
+                        this.reports = data || [];
+                    } catch (error) {
+                        console.error('Error loading reports:', error);
+                        this.showAlert('error', 'Could not load reports');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                async approveReport(report) {
+                    report.processing = true;
+                    
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            report.status = 'approved';
+                            report.processing = false;
+                            this.showAlert('success', 'Demo: Report approved');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        const { error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .update({ 
+                                status: 'approved',
+                                reviewed_by: 'admin',
+                                reviewed_at: new Date().toISOString()
+                            })
+                            .eq('id', report.id);
+                            
+                        if (error) throw error;
+                        
+                        report.status = 'approved';
+                        this.showAlert('success', 'Report approved successfully');
+                    } catch (error) {
+                        console.error('Error approving report:', error);
+                        this.showAlert('error', 'Could not approve report');
+                    } finally {
+                        report.processing = false;
+                    }
+                },
+                
+                async rejectReport(report) {
+                    report.processing = true;
+                    
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            report.status = 'rejected';
+                            report.processing = false;
+                            this.showAlert('success', 'Demo: Report rejected');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        const { error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .update({ 
+                                status: 'rejected',
+                                reviewed_by: 'admin',
+                                reviewed_at: new Date().toISOString()
+                            })
+                            .eq('id', report.id);
+                            
+                        if (error) throw error;
+                        
+                        report.status = 'rejected';
+                        this.showAlert('success', 'Report rejected');
+                    } catch (error) {
+                        console.error('Error rejecting report:', error);
+                        this.showAlert('error', 'Could not reject report');
+                    } finally {
+                        report.processing = false;
+                    }
+                },
+                
+                async unflagReport(report) {
+                    report.processing = true;
+                    
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            report.flagged = false;
+                            report.status = 'open';
+                            report.processing = false;
+                            this.showAlert('success', 'Demo: Flag removed');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        const { error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .update({ 
+                                flagged: false,
+                                status: 'open',
+                                reviewed_by: 'admin',
+                                reviewed_at: new Date().toISOString()
+                            })
+                            .eq('id', report.id);
+                            
+                        if (error) throw error;
+                        
+                        report.flagged = false;
+                        report.status = 'open';
+                        this.showAlert('success', 'Flag removed - report is now visible');
+                    } catch (error) {
+                        console.error('Error unflagging report:', error);
+                        this.showAlert('error', 'Could not remove flag');
+                    } finally {
+                        report.processing = false;
+                    }
+                },
+                
+                async deleteReport(report) {
+                    // Confirm deletion
+                    if (!confirm(`Are you sure you want to permanently delete the report "${report.title}"? This action cannot be undone.`)) {
+                        return;
+                    }
+                    
+                    report.processing = true;
+                    
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            // Remove from local array in demo mode
+                            const index = this.reports.findIndex(r => r.id === report.id);
+                            if (index !== -1) {
+                                this.reports.splice(index, 1);
+                            }
+                            report.processing = false;
+                            this.showAlert('success', 'Demo: Report deleted');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        const { error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .delete()
+                            .eq('id', report.id);
+                            
+                        if (error) throw error;
+                        
+                        // Remove from local array
+                        const index = this.reports.findIndex(r => r.id === report.id);
+                        if (index !== -1) {
+                            this.reports.splice(index, 1);
+                        }
+                        
+                        this.showAlert('success', 'Report permanently deleted');
+                    } catch (error) {
+                        console.error('Error deleting report:', error);
+                        this.showAlert('error', 'Could not delete report');
+                    } finally {
+                        report.processing = false;
+                    }
+                },
+                
+                showAuthAlert(type, message) {
+                    this.authAlert = {
+                        show: true,
+                        type: type === 'success' ? 'alert-success' : 'alert-error',
+                        message
+                    };
+                    setTimeout(() => { this.authAlert.show = false; }, 3000);
+                },
+                
+                showAlert(type, message) {
+                    this.alert = {
+                        show: true,
+                        type: type === 'success' ? 'alert-success' : 'alert-error',
+                        message
+                    };
+                    setTimeout(() => { this.alert.show = false; }, 3000);
+                },
+                
+                formatDate(dateString) {
+                    if (!dateString) return 'Unknown time';
+                    const date = new Date(dateString);
+                    if (isNaN(date.getTime())) return 'Invalid date';
+                    return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

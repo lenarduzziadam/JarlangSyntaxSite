@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Config -->
+    <script src="js/config.js"></script>
     
     <style>
         body {
@@ -223,6 +225,57 @@
             color: #555;
             line-height: 1.5;
         }
+        .report-actions {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e1e5e9;
+            display: flex;
+            gap: 8px;
+        }
+        .btn-small {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e1e5e9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-small:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        .btn-small.danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-small.danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+        .report-flagged {
+            opacity: 0.6;
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+        }
+        .report-flagged .report-title::after {
+            content: " [FLAGGED]";
+            color: #c53030;
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+        .report-hidden {
+            display: none;
+        }
+        .moderation-notice {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+            color: #92400e;
+        }
         .loading {
             text-align: center;
             padding: 40px;
@@ -249,6 +302,7 @@
         <a href="howto.html">How-To Guide</a>
         <a href="story.html">Story of Jarlang</a>
         <a href="reports.html">Reports & Suggestions</a>
+        <a href="downloads.html">Downloads</a>
     </nav>
 
     <div id="app">
@@ -335,6 +389,10 @@
                 <section class="reports-list" id="view-reports">
                     <h2>Recent Reports & Suggestions</h2>
                     
+                    <div v-if="flaggedCount > 0" class="moderation-notice">
+                        <strong>⚠️ Content Moderation:</strong> {{ flaggedCount }} report(s) have been flagged and are hidden pending review.
+                    </div>
+                    
                     <div v-if="loading" class="loading">
                         Loading reports...
                     </div>
@@ -344,12 +402,13 @@
                         <br><a href="QUICK_SETUP.md" style="color: #667eea;">View setup guide →</a>
                     </div>
                     
-                    <div v-else-if="reports.length === 0" class="loading">
-                        No reports yet. Be the first to contribute!
+                    <div v-else-if="visibleReports.length === 0" class="loading">
+                        {{ reports.length === 0 ? 'No reports yet. Be the first to contribute!' : 'All reports are currently under review.' }}
                     </div>
                     
                     <div v-else>
-                        <div v-for="report in reports" :key="report.id" class="report-item">
+                        <div v-for="report in visibleReports" :key="report.id" 
+                             :class="['report-item', { 'report-flagged': report.flagged }]">
                             <div class="report-header">
                                 <span :class="['report-type', report.type]">{{ report.type }}</span>
                             </div>
@@ -358,6 +417,17 @@
                                 Submitted {{ formatDate(report.created_at) }}
                             </div>
                             <div class="report-description">{{ report.description }}</div>
+                            <div class="report-actions">
+                                <button v-if="!report.flagged" 
+                                        @click="flagReport(report)" 
+                                        class="btn-small danger"
+                                        :disabled="report.flagging">
+                                    {{ report.flagging ? 'Flagging...' : '🚩 Flag as Inappropriate' }}
+                                </button>
+                                <span v-if="report.flagged" class="btn-small" style="color: #c53030;">
+                                    ⚠️ Flagged for Review
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -368,15 +438,12 @@
     <script>
         const { createApp } = Vue;
         
-        // Initialize Supabase (you'll need to replace these with your actual credentials)
-        const supabaseUrl = 'https://iiaytfagmiabwznwxgwx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0';
+        // Initialize Supabase using config
+        const supabaseClient = window.supabaseConfig.getSupabaseClient();
+        const supabaseConfigured = window.supabaseConfig.isConfigured();
         
-        // Check if credentials are configured
-        let supabaseClient = null;
-        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
-            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        }
+        // Log environment info
+        window.supabaseConfig.logEnvironment();
 
         createApp({
             data() {
@@ -390,13 +457,21 @@
                     reports: [],
                     loading: false,
                     submitting: false,
-                    supabaseConfigured: supabaseClient !== null,
+                    supabaseConfigured: supabaseConfigured,
                     alert: {
                         show: false,
                         type: '',
                         message: ''
                     }
                 };
+            },
+            computed: {
+                visibleReports() {
+                    return this.reports.filter(report => !report.flagged || report.status === 'approved');
+                },
+                flaggedCount() {
+                    return this.reports.filter(report => report.flagged && report.status !== 'approved').length;
+                }
             },
             async mounted() {
                 await this.loadReports();
@@ -489,6 +564,7 @@
                         const { data, error } = await supabaseClient
                             .from('jarlang_reports')
                             .select('*')
+                            .or('flagged.eq.false,status.eq.approved') // Only show non-flagged or approved reports
                             .order('created_at', { ascending: false })
                             .limit(20);
 
@@ -510,6 +586,62 @@
                         description: '',
                         contact: ''
                     };
+                },
+                
+                async flagReport(report) {
+                    console.log('flagReport called with:', report);
+                    
+                    // Set loading state for this specific report
+                    report.flagging = true;
+                    console.log('Set flagging to true, report.flagging is now:', report.flagging);
+                    
+                    // Demo mode - simulate flagging
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            // Remove the report from display in demo mode too
+                            const reportIndex = this.reports.findIndex(r => r.id === report.id);
+                            if (reportIndex !== -1) {
+                                this.reports.splice(reportIndex, 1);
+                            }
+                            report.flagging = false;
+                            this.showAlert('success', 'Demo: Report flagged for review and hidden (Supabase not configured)');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        console.log('Flagging report:', report.id);
+                        const { data, error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .update({ 
+                                flagged: true, 
+                                status: 'pending_review',
+                                flagged_at: new Date().toISOString()
+                            })
+                            .eq('id', report.id)
+                            .select();
+                            
+                        if (error) {
+                            console.error('Supabase error:', error);
+                            throw error;
+                        }
+                        
+                        console.log('Update successful:', data);
+                        
+                        // Remove the flagged report from the local display since it's now pending review
+                        const reportIndex = this.reports.findIndex(r => r.id === report.id);
+                        if (reportIndex !== -1) {
+                            this.reports.splice(reportIndex, 1);
+                        }
+                        
+                        this.showAlert('success', 'Report flagged for review and hidden from public view. Thank you for helping maintain content quality.');
+                        
+                    } catch (error) {
+                        console.error('Error flagging report:', error);
+                        this.showAlert('error', `Could not flag report: ${error.message || 'Unknown error'}`);
+                    } finally {
+                        report.flagging = false;
+                    }
                 },
                 
                 showAlert(type, message) {
