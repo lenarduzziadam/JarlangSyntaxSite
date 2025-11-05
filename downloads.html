@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarlang Downloads</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: #667eea;
+            padding: 10px 0;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            gap: 32px;
+        }
+        .sidebar {
+            min-width: 220px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px 16px;
+            height: fit-content;
+            position: sticky;
+            top: 32px;
+        }
+        .sidebar h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .sidebar a:hover {
+            color: #667eea;
+        }
+        .main-content {
+            flex: 1;
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+        }
+        .mascot-img {
+            height: 80px;
+            width: auto;
+            margin-left: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #fff;
+        }
+        .download-section {
+            background: #f8f9fa;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .download-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #4fd1c5 100%);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 8px 16px 8px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+        .github-button {
+            background: linear-gradient(135deg, #24292e 0%, #586069 100%);
+            box-shadow: 0 4px 12px rgba(36, 41, 46, 0.3);
+        }
+        .github-button:hover {
+            box-shadow: 0 6px 16px rgba(36, 41, 46, 0.4);
+        }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .spec-card {
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+        .spec-card:hover {
+            border-color: #667eea;
+        }
+        .spec-card h3 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        .spec-list {
+            list-style: none;
+            padding: 0;
+        }
+        .spec-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+        .spec-list strong {
+            color: #333;
+            display: inline-block;
+            min-width: 120px;
+        }
+        .future-section {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .future-section h3 {
+            color: #f57c00;
+            margin-top: 0;
+        }
+        .installation-steps {
+            counter-reset: step-counter;
+        }
+        .installation-step {
+            counter-increment: step-counter;
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+        .installation-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            background: #28a745;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 0;
+                margin: 20px;
+            }
+            .sidebar {
+                margin-bottom: 24px;
+                position: static;
+            }
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .mascot-img {
+                margin: 16px 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="syntax.html">Syntax</a>
+        <a href="stdlib.html">Standard Library</a>
+        <a href="testlib.html">Test Library</a>
+        <a href="howto.html">How-To Guide</a>
+        <a href="story.html">Story of Jarlang</a>
+        <a href="reports.html">Reports & Suggestions</a>
+        <a href="downloads.html">Downloads</a>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#downloads">Download Jarlang</a></li>
+                <li><a href="#requirements">System Requirements</a></li>
+                <li><a href="#installation">Installation Guide</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#future">Future Plans</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>📥 Jarlang Downloads</h1>
+                <img src="jarlang_resources/jarknight_final_glaze.png" alt="JarKnight Mascot" class="mascot-img" />
+            </div>
+
+            <section class="download-section" id="downloads">
+                <h2>🚀 Get Jarlang Runner</h2>
+                <p>Download the Jarlang interpreter and start coding with the warrior jar programming language!</p>
+                
+                <div style="text-align: center; margin: 24px 0;">
+                    <a href="https://drive.google.com/drive/u/3/folders/10LGzvXdpaqdqb5U4uXlYkFmuhvwXI82C" 
+                       class="download-button" target="_blank">
+                        📁 Download from Google Drive
+                    </a>
+                    <a href="https://github.com/lenarduzziadam/jarLang" 
+                       class="download-button github-button" target="_blank">
+                        🐙 View on GitHub
+                    </a>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Note:</strong> Jarlang is currently in active development. Expect frequent updates and potential breaking changes as we improve the language!
+                </div>
+            </section>
+
+            <section id="requirements">
+                <h2>💻 System Requirements</h2>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <h3>🖥️ Hardware Requirements</h3>
+                        <ul class="spec-list">
+                            <li><strong>OS:</strong> Windows 10+, macOS 10.14+, or Linux</li>
+                            <li><strong>RAM:</strong> 4GB minimum, 8GB recommended</li>
+                            <li><strong>Storage:</strong> 100MB free space</li>
+                            <li><strong>CPU:</strong> Any modern 64-bit processor</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="spec-card">
+                        <h3>☕ Software Requirements</h3>
+                        <ul class="spec-list">
+                            <li><strong>Java:</strong> JDK 11 or higher</li>
+                            <li><strong>javac:</strong> Java compiler (included with JDK)</li>
+                            <li><strong>Terminal:</strong> Command line access</li>
+                            <li><strong>Editor:</strong> Any text editor (VS Code recommended)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="installation">
+                <h2>🛠️ Installation Guide</h2>
+                
+                <div class="installation-steps">
+                    <div class="installation-step">
+                        <h3>Install Java Development Kit (JDK)</h3>
+                        <p>Jarlang requires Java to run. Download and install JDK 11 or higher:</p>
+                        <ul>
+                            <li><strong>Oracle JDK:</strong> <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">oracle.com/java</a></li>
+                            <li><strong>OpenJDK:</strong> <a href="https://openjdk.org/" target="_blank">openjdk.org</a></li>
+                            <li><strong>Amazon Corretto:</strong> <a href="https://aws.amazon.com/corretto/" target="_blank">aws.amazon.com/corretto</a></li>
+                        </ul>
+                        
+                        <p>Verify installation by running:</p>
+                        <div class="code-block">java -version<br>javac -version</div>
+                    </div>
+
+                    <div class="installation-step">
+                        <h3>Download Jarlang Runner</h3>
+                        <p>Download the Jarlang JAR file from the Google Drive link above. The main file you need is:</p>
+                        <div class="code-block">jarlang-runner.jar</div>
+                        <p>Place this file in a dedicated folder like <code>C:\jarlang\</code> or <code>~/jarlang/</code></p>
+                    </div>
+
+                    <div class="installation-step">
+                        <h3>Run Your First Jarlang Program</h3>
+                        <p>Create a simple Jarlang program (<code>hello.jar</code>):</p>
+                        <div class="code-block">vessel main() {<br>    echo("Hello, warrior jar world!");<br>}</div>
+                        
+                        <p>Run it with the Jarlang interpreter:</p>
+                        <div class="code-block">java -jar jarlang-runner.jar hello.jar</div>
+                    </div>
+
+                    <div class="installation-step">
+                        <h3>Set Up Environment (Optional)</h3>
+                        <p>For easier access, add Jarlang to your system PATH or create an alias:</p>
+                        
+                        <p><strong>Windows (PowerShell):</strong></p>
+                        <div class="code-block">function jarlang { java -jar C:\path\to\jarlang-runner.jar $args }</div>
+                        
+                        <p><strong>macOS/Linux (Bash/Zsh):</strong></p>
+                        <div class="code-block">alias jarlang='java -jar ~/path/to/jarlang-runner.jar'</div>
+                        
+                        <p>Then you can run programs with just:</p>
+                        <div class="code-block">jarlang hello.jar</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="troubleshooting">
+                <h2>🔧 Troubleshooting</h2>
+                
+                <div class="spec-card">
+                    <h3>Common Issues</h3>
+                    <ul class="spec-list">
+                        <li><strong>"java: command not found"</strong><br>Java is not installed or not in PATH. Install JDK and restart terminal.</li>
+                        <li><strong>"Could not find or load main class"</strong><br>JAR file is corrupted or path is incorrect. Re-download the JAR file.</li>
+                        <li><strong>"UnsupportedClassVersionError"</strong><br>Java version is too old. Update to JDK 11 or higher.</li>
+                        <li><strong>Jarlang syntax errors</strong><br>Check the <a href="syntax.html">syntax documentation</a> for proper Jarlang code structure.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="future-section" id="future">
+                <h3>🐳 Future: Docker Support</h3>
+                <p>We're planning to introduce a Docker-based launcher to make Jarlang easier to run across different environments. This will eliminate the need to manually install Java and handle environment setup.</p>
+                
+                <p><strong>Planned features:</strong></p>
+                <ul>
+                    <li>One-command installation via Docker</li>
+                    <li>Consistent runtime environment across all platforms</li>
+                    <li>Integrated development environment</li>
+                    <li>Easy version management and updates</li>
+                </ul>
+                
+                <p>Stay tuned for updates on our <a href="https://github.com/lenarduzziadam/jarLang" target="_blank">GitHub repository</a>!</p>
+            </section>
+
+            <section>
+                <h2>📚 Next Steps</h2>
+                <p>Once you have Jarlang installed, check out these resources:</p>
+                <ul>
+                    <li><a href="syntax.html">📖 Language Syntax Guide</a> - Learn Jarlang's unique syntax</li>
+                    <li><a href="stdlib.html">🔧 Standard Library</a> - Built-in functions and utilities</li>
+                    <li><a href="howto.html">🎯 How-To Guide</a> - Practical examples and tutorials</li>
+                    <li><a href="story.html">🏺 Story of Jarlang</a> - Learn about the language's origins</li>
+                    <li><a href="reports.html">💬 Reports & Suggestions</a> - Share feedback and get help</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
