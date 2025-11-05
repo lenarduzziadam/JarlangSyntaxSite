@@ -615,7 +615,8 @@
                             .from('jarlang_reports')
                             .update({ 
                                 flagged: true, 
-                                status: 'pending_review'
+                                status: 'pending_review',
+                                flagged_at: new Date().toISOString()
                             })
                             .eq('id', report.id)
                             .select();

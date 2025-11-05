@@ -271,7 +271,9 @@
                         <div v-for="report in pendingReviewReports" :key="report.id" class="report-item flagged">
                             <div class="report-header">
                                 <span :class="['report-type', report.type]">{{ report.type }}</span>
-                                <span style="font-size: 12px; color: #c53030;">FLAGGED {{ formatDate(report.flagged_at) }}</span>
+                                <span style="font-size: 12px; color: #c53030;">
+                                    FLAGGED {{ report.flagged_at ? formatDate(report.flagged_at) : 'at unknown time' }}
+                                </span>
                             </div>
                             <div class="report-title">{{ report.title }}</div>
                             <div class="report-meta">
@@ -600,7 +602,9 @@
                 },
                 
                 formatDate(dateString) {
+                    if (!dateString) return 'Unknown time';
                     const date = new Date(dateString);
+                    if (isNaN(date.getTime())) return 'Invalid date';
                     return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
                 }
             }
