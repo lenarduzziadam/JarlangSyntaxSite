@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Config -->
+    <script src="js/config.js"></script>
     
     <style>
         body {
@@ -244,7 +246,7 @@
                 </button>
             </form>
             <p style="font-size: 12px; color: #666; margin-top: 16px;">
-                Default password: "admin123" (change this in production!)
+                Current password: "{{ currentAdminPassword }}" (change this in js/config.js!)
             </p>
         </div>
 
@@ -361,14 +363,12 @@
     <script>
         const { createApp } = Vue;
         
-        // Initialize Supabase (use same credentials as reports.html)
-        const supabaseUrl = 'https://iiaytfagmiabwznwxgwx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0';
+        // Initialize Supabase using config
+        const supabaseClient = window.supabaseConfig.getSupabaseClient();
+        const supabaseConfigured = window.supabaseConfig.isConfigured();
         
-        let supabaseClient = null;
-        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
-            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        }
+        // Log environment info
+        window.supabaseConfig.logEnvironment();
 
         createApp({
             data() {
@@ -388,7 +388,8 @@
                 approvedReports() { return this.reports.filter(r => r.status === 'approved').length; },
                 rejectedReports() { return this.reports.filter(r => r.status === 'rejected').length; },
                 pendingReviewReports() { return this.reports.filter(r => r.status === 'pending_review'); },
-                recentReports() { return this.reports.filter(r => r.status !== 'pending_review').slice(0, 10); }
+                recentReports() { return this.reports.filter(r => r.status !== 'pending_review').slice(0, 10); },
+                currentAdminPassword() { return window.supabaseConfig ? window.supabaseConfig.getAdminPassword() : 'admin123'; }
             },
             async mounted() {
                 // Check if already authenticated
@@ -403,7 +404,7 @@
                     
                     // Simple password check (in production, use proper authentication)
                     setTimeout(() => {
-                        if (this.password === 'admin123') {
+                        if (this.password === window.supabaseConfig.getAdminPassword()) {
                             this.authenticated = true;
                             localStorage.setItem('jarlang_admin_auth', 'true');
                             this.loadReports();

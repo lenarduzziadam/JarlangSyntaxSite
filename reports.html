@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Config -->
+    <script src="js/config.js"></script>
     
     <style>
         body {
@@ -435,15 +437,12 @@
     <script>
         const { createApp } = Vue;
         
-        // Initialize Supabase (you'll need to replace these with your actual credentials)
-        const supabaseUrl = 'https://iiaytfagmiabwznwxgwx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0';
+        // Initialize Supabase using config
+        const supabaseClient = window.supabaseConfig.getSupabaseClient();
+        const supabaseConfigured = window.supabaseConfig.isConfigured();
         
-        // Check if credentials are configured
-        let supabaseClient = null;
-        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
-            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        }
+        // Log environment info
+        window.supabaseConfig.logEnvironment();
 
         createApp({
             data() {
@@ -457,7 +456,7 @@
                     reports: [],
                     loading: false,
                     submitting: false,
-                    supabaseConfigured: supabaseClient !== null,
+                    supabaseConfigured: supabaseConfigured,
                     alert: {
                         show: false,
                         type: '',
