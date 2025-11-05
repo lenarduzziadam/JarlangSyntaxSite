@@ -1,0 +1,367 @@
+/* 
+ * Jarlang Common Stylesheet
+ * Shared styles across all Jarlang documentation pages
+ */
+
+/* === Base Styles === */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* === Navigation Bar === */
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: #667eea;
+    padding: 10px 0;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 0;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* === Container and Layout === */
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    gap: 32px;
+}
+
+/* === Sidebar === */
+.sidebar {
+    min-width: 220px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 24px 16px;
+    height: fit-content;
+    position: sticky;
+    top: 32px;
+}
+
+.sidebar h3 {
+    font-size: 1.1em;
+    margin-bottom: 12px;
+    color: #667eea;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.sidebar a:hover {
+    color: #667eea;
+}
+
+/* === Main Content === */
+.main-content {
+    flex: 1;
+    background: white;
+    padding: 32px 32px 32px 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+/* === Page Header === */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 2.2em;
+}
+
+/* === Mascot Image === */
+.mascot-img {
+    height: 80px;
+    width: auto;
+    margin-left: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    background: #fff;
+}
+
+/* === Typography === */
+h1 {
+    color: #333;
+    text-align: left;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #667eea;
+    margin-top: 32px;
+    font-size: 1.5em;
+}
+
+/* === Tables === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 8px;
+    text-align: left;
+}
+
+th {
+    background: #f7f7fa;
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* === Code Blocks === */
+.code {
+    background: #23272e;
+    color: #e3eaf2;
+    padding: 14px;
+    border-radius: 6px;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    white-space: pre;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    font-size: 1em;
+}
+
+code {
+    background: #e3eaf2;
+    color: #667eea;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+pre {
+    background: #e6f7ff;
+    color: #333;
+    border-left: 6px solid #667eea;
+    padding: 18px 24px;
+    border-radius: 8px;
+    font-size: 1.15em;
+    margin-bottom: 18px;
+    margin-top: 0;
+    overflow-x: auto;
+}
+
+/* === Cards and Sections === */
+.spec-card {
+    background: white;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    transition: border-color 0.2s;
+}
+
+.spec-card:hover {
+    border-color: #667eea;
+}
+
+.spec-card h3 {
+    color: #667eea;
+    margin-top: 0;
+    font-size: 1.3em;
+}
+
+.spec-list {
+    list-style: none;
+    padding: 0;
+}
+
+.spec-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.spec-list li:last-child {
+    border-bottom: none;
+}
+
+.spec-list strong {
+    color: #333;
+    display: inline-block;
+    min-width: 100px;
+    vertical-align: top;
+}
+
+/* === Buttons === */
+.btn {
+    background: linear-gradient(135deg, #667eea 0%, #4fd1c5 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-small {
+    background: #f8f9fa;
+    color: #666;
+    border: 1px solid #e1e5e9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-small:hover {
+    background: #e9ecef;
+    color: #333;
+}
+
+.btn-small.danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-small.danger:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* === Alerts === */
+.alert {
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* === Form Elements === */
+.form-section {
+    background: #f8f9fa;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* === Utility Classes === */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* === Responsive Design === */
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        gap: 0;
+        margin: 20px;
+    }
+
+    .sidebar {
+        margin-bottom: 24px;
+        position: static;
+    }
+
+    .page-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mascot-img {
+        margin: 16px 0 0 0;
+    }
+
+    .main-content {
+        padding: 18px 8px 24px 8px;
+    }
+}

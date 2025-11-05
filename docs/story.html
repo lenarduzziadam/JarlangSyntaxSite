@@ -4,93 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Story of Jarlang</title>
+    <link rel="stylesheet" href="css/jarlang-common.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background: #667eea;
-            padding: 10px 0;
-            border-radius: 0 0 8px 8px;
-            margin-bottom: 0;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 20px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 40px auto;
-            gap: 32px;
-        }
-        .sidebar {
-            min-width: 220px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            padding: 24px 16px;
-            height: fit-content;
-            position: sticky;
-            top: 32px;
-        }
-        .sidebar h3 {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            color: #667eea;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar li {
-            margin-bottom: 10px;
-        }
-        .sidebar a {
-            color: #333;
-            text-decoration: none;
-            font-size: 1em;
-        }
-        .sidebar a:hover {
-            color: #667eea;
-        }
-        .main-content {
-            flex: 1;
-            background: white;
-            padding: 32px 32px 32px 32px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-        .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-        }
-        .page-header h1 {
-            margin: 0;
-            color: #333;
-            font-size: 2.2em;
-        }
-        .mascot-img {
-            height: 80px;
-            width: auto;
-            margin-left: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            background: #fff;
-        }
+        /* Page-specific styles */
         .story-section {
             background: white;
             padding: 24px;
@@ -181,15 +97,6 @@
             color: #4fd1c5;
         }
         @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
-                gap: 0;
-                margin: 20px;
-            }
-            .sidebar {
-                margin-bottom: 24px;
-                position: static;
-            }
             .mascot-gallery {
                 grid-template-columns: 1fr;
             }
@@ -201,7 +108,7 @@
         <a href="syntax.html">Syntax</a>
         <a href="stdlib.html">Standard Library</a>
         <a href="testlib.html">Test Library</a>
-        <a href="howto.html">How-To Guide</a>
+        <a href="index.html">How-To Guide</a>
         <a href="story.html">Story of Jarlang</a>
         <a href="reports.html">Reports & Suggestions</a>
         <a href="downloads.html">Downloads</a>
@@ -229,7 +136,7 @@
             <section class="story-section" id="origin">
                 <h2>The Origin Story</h2>
                 <p>
-                    Jarlang was born from a unique combination of curiosity about programming language design and an unexpected source of inspiration: the world of <em>Elden Ring</em>. What started as a quest to understand the deeper mechanics of language creation evolved into something much more personal and meaningful.
+                    Jarlang was born from a unique combination of curiosity about programming language design and an unexpected source of inspiration: the world of <em>Elden Ring</em>. What started as a quest to understand the deeper mechanics of language creation evolved into something much more personal and fun.
                 </p>
                 <div class="quote">
                     "Sometimes the best projects come from the most unexpected combinations of interests and inspirations."
@@ -242,7 +149,7 @@
             <section class="story-section" id="inspiration">
                 <h2>Elden Ring Inspiration</h2>
                 <p>
-                    The warrior theme of Jarlang draws heavily from the rich lore and aesthetic of <em>Elden Ring</em>. The game's emphasis on perseverance, crafting, and the mystical relationship between warriors and their tools resonated deeply with the programming experience.
+                    The warrior theme of Jarlang draws heavily from the rich lore and aesthetic of <em>Elden Ring</em>. The game's emphasis on perseverance, crafting, and the mystical relationship between warriors and their tools in particular parallels the development experience.
                 </p>
                 <div class="highlight-box">
                     <h3>Why Warriors and Programming?</h3>

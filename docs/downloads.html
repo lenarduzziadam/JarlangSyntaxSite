@@ -5,93 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jarlang Downloads</title>
     
+    <link rel="stylesheet" href="css/jarlang-common.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar {
-            display: flex;
-            justify-content: center;
-            background: #667eea;
-            padding: 10px 0;
-            border-radius: 0 0 8px 8px;
-            margin-bottom: 0;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 20px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 40px auto;
-            gap: 32px;
-        }
-        .sidebar {
-            min-width: 220px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            padding: 24px 16px;
-            height: fit-content;
-            position: sticky;
-            top: 32px;
-        }
-        .sidebar h3 {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            color: #667eea;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar li {
-            margin-bottom: 10px;
-        }
-        .sidebar a {
-            color: #333;
-            text-decoration: none;
-            font-size: 1em;
-        }
-        .sidebar a:hover {
-            color: #667eea;
-        }
-        .main-content {
-            flex: 1;
-            background: white;
-            padding: 32px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-        .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-        }
-        .page-header h1 {
-            margin: 0;
-            color: #333;
-            font-size: 2.2em;
-        }
-        .mascot-img {
-            height: 80px;
-            width: auto;
-            margin-left: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            background: #fff;
-        }
+        /* Page-specific styles */
         .download-section {
             background: #f8f9fa;
             padding: 24px;
@@ -129,40 +45,6 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             margin: 24px 0;
-        }
-        .spec-card {
-            background: white;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            padding: 20px;
-            transition: border-color 0.2s;
-        }
-        .spec-card:hover {
-            border-color: #667eea;
-        }
-        .spec-card h3 {
-            color: #667eea;
-            margin-top: 0;
-            font-size: 1.3em;
-        }
-        .spec-list {
-            list-style: none;
-            padding: 0;
-        }
-        .spec-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-        .spec-list li:last-child {
-            border-bottom: none;
-        }
-        .spec-list strong {
-            color: #333;
-            display: inline-block;
-            min-width: 100px;
-            vertical-align: top;
         }
         .future-section {
             background: #fff8e1;
@@ -219,24 +101,6 @@
             border-radius: 6px;
             margin: 16px 0;
         }
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
-                gap: 0;
-                margin: 20px;
-            }
-            .sidebar {
-                margin-bottom: 24px;
-                position: static;
-            }
-            .page-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .mascot-img {
-                margin: 16px 0 0 0;
-            }
-        }
     </style>
 </head>
 <body>
@@ -244,7 +108,7 @@
         <a href="syntax.html">Syntax</a>
         <a href="stdlib.html">Standard Library</a>
         <a href="testlib.html">Test Library</a>
-        <a href="howto.html">How-To Guide</a>
+        <a href="index.html">How-To Guide</a>
         <a href="story.html">Story of Jarlang</a>
         <a href="reports.html">Reports & Suggestions</a>
         <a href="downloads.html">Downloads</a>
@@ -270,7 +134,7 @@
 
             <section class="download-section" id="downloads">
                 <h2>🚀 Get Jarlang Runner</h2>
-                <p>Download the Jarlang interpreter and start coding with the warrior jar programming language!</p>
+                <p>Download the Jarlang interpreter and start coding with Jar Knight's tremendous programming language!</p>
                 
                 <div style="text-align: center; margin: 24px 0;">
                     <a href="https://drive.google.com/drive/u/3/folders/10LGzvXdpaqdqb5U4uXlYkFmuhvwXI82C" 
@@ -333,17 +197,18 @@
                     <div class="installation-step">
                         <h3>Download Jarlang Runner</h3>
                         <p>Download the Jarlang JAR file from the Google Drive link above. The main file you need is:</p>
-                        <div class="code-block">jarlang-runner.jar</div>
-                        <p>Place this file in a dedicated folder like <code>C:\jarlang\</code> or <code>~/jarlang/</code></p>
+                        <div class="code-block">jarlang.jar</div>
+                        <p>Keep this file in the JarlangExecutable folder <code>C:\..\JarlangExecutable\</code> or <code>~/../JarlangExecutable/</code></p>
                     </div>
 
                     <div class="installation-step">
-                        <h3>Run Your First Jarlang Program</h3>
-                        <p>Create a simple Jarlang program (<code>hello.jar</code>):</p>
-                        <div class="code-block">vessel main() {<br>    echo("Hello, warrior jar world!");<br>}</div>
-                        
-                        <p>Run it with the Jarlang interpreter:</p>
-                        <div class="code-block">java -jar jarlang-runner.jar hello.jar</div>
+                        <h3>Run Jarlang Shell REPL</h3>
+                        <p>Create a simple Jarlang program (<code>HelloWorld.vase</code>):</p>
+                        <div class="code-block">forge hello() {<br>    mend "Hello, warrior jar world!";<br>}<br><br>hello();</div>
+                        <p>Run within the Terminal:</p>
+                        <div class="code-block">java -jar jarlang.jar</div>
+                        <p>In the REPL, execute your program:</p>
+                        <div class="code-block">!run HelloWorld.vase</div>
                     </div>
 
                     <div class="installation-step">
@@ -351,13 +216,12 @@
                         <p>For easier access, add Jarlang to your system PATH or create an alias:</p>
                         
                         <p><strong>Windows (PowerShell):</strong></p>
-                        <div class="code-block">function jarlang { java -jar C:\path\to\jarlang-runner.jar $args }</div>
+                        <div class="code-block">function jarlang { java -jar C:\path\to\jarlang.jar $args }</div>
                         
                         <p><strong>macOS/Linux (Bash/Zsh):</strong></p>
-                        <div class="code-block">alias jarlang='java -jar ~/path/to/jarlang-runner.jar'</div>
-                        
-                        <p>Then you can run programs with just:</p>
-                        <div class="code-block">jarlang hello.jar</div>
+                        <div class="code-block">alias jarlang='java -jar ~/path/to/jarlang.jar'</div>
+                        <p>Now you can run Jarlang from any terminal location with one command:</p>
+                        <div class="code-block">jarlang</div>
                     </div>
                 </div>
             </section>
