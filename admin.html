@@ -28,6 +28,31 @@
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+        }
+        .header p {
+            margin: 0;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
         }
         .stats {
             display: grid;
@@ -228,7 +253,7 @@
             <div class="header">
                 <h1>🛡️ Jarlang Reports - Admin Panel</h1>
                 <p>Review and moderate user-submitted reports</p>
-                <button @click="logout" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; float: right;">
+                <button @click="logout" class="logout-btn">
                     Logout
                 </button>
             </div>
