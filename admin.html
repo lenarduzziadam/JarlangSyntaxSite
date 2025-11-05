@@ -146,6 +146,13 @@
         .btn-unflag:hover {
             background: #3182ce;
         }
+        .btn-delete {
+            background: #e53e3e;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #c53030;
+        }
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -282,6 +289,9 @@
                                 <button @click="unflagReport(report)" class="btn btn-unflag" :disabled="report.processing">
                                     {{ report.processing ? 'Processing...' : '🚩 Remove Flag' }}
                                 </button>
+                                <button @click="deleteReport(report)" class="btn btn-delete" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '🗑️ Delete' }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -309,6 +319,11 @@
                                 Submitted {{ formatDate(report.created_at) }}
                             </div>
                             <div class="report-description">{{ report.description }}</div>
+                            <div class="admin-actions">
+                                <button @click="deleteReport(report)" class="btn btn-delete" :disabled="report.processing">
+                                    {{ report.processing ? 'Processing...' : '🗑️ Delete' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -517,6 +532,50 @@
                     } catch (error) {
                         console.error('Error unflagging report:', error);
                         this.showAlert('error', 'Could not remove flag');
+                    } finally {
+                        report.processing = false;
+                    }
+                },
+                
+                async deleteReport(report) {
+                    // Confirm deletion
+                    if (!confirm(`Are you sure you want to permanently delete the report "${report.title}"? This action cannot be undone.`)) {
+                        return;
+                    }
+                    
+                    report.processing = true;
+                    
+                    if (!supabaseClient) {
+                        setTimeout(() => {
+                            // Remove from local array in demo mode
+                            const index = this.reports.findIndex(r => r.id === report.id);
+                            if (index !== -1) {
+                                this.reports.splice(index, 1);
+                            }
+                            report.processing = false;
+                            this.showAlert('success', 'Demo: Report deleted');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    try {
+                        const { error } = await supabaseClient
+                            .from('jarlang_reports')
+                            .delete()
+                            .eq('id', report.id);
+                            
+                        if (error) throw error;
+                        
+                        // Remove from local array
+                        const index = this.reports.findIndex(r => r.id === report.id);
+                        if (index !== -1) {
+                            this.reports.splice(index, 1);
+                        }
+                        
+                        this.showAlert('success', 'Report permanently deleted');
+                    } catch (error) {
+                        console.error('Error deleting report:', error);
+                        this.showAlert('error', 'Could not delete report');
                     } finally {
                         report.processing = false;
                     }

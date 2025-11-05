@@ -589,8 +589,11 @@
                 },
                 
                 async flagReport(report) {
+                    console.log('flagReport called with:', report);
+                    
                     // Set loading state for this specific report
                     report.flagging = true;
+                    console.log('Set flagging to true, report.flagging is now:', report.flagging);
                     
                     // Demo mode - simulate flagging
                     if (!supabaseClient) {
