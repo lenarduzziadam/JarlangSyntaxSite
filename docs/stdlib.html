@@ -4,123 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jarlang Standard Library</title>
+    <link rel="stylesheet" href="css/jarlang-common.css">
     <style>
-            body {
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background-color: #f5f5f5;
-                margin: 0;
-                padding: 0;
-            }
-            .navbar {
-                display: flex;
-                justify-content: center;
-                background: #667eea;
-                padding: 10px 0;
-                border-radius: 0 0 8px 8px;
-                margin-bottom: 0;
-            }
-            .navbar a {
-                color: white;
-                text-decoration: none;
-                margin: 0 20px;
-                font-weight: bold;
-                font-size: 18px;
-            }
-            .navbar a:hover {
-                text-decoration: underline;
-            }
-            .container {
-                display: flex;
-                max-width: 1200px;
-                margin: 40px auto;
-                gap: 32px;
-            }
-            .sidebar {
-                min-width: 220px;
-                background: #fff;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-                padding: 24px 16px;
-                height: fit-content;
-                position: sticky;
-                top: 32px;
-            }
-            .sidebar h3 {
-                font-size: 1.1em;
-                margin-bottom: 12px;
-                color: #667eea;
-            }
-            .sidebar ul {
-                list-style: none;
-                padding: 0;
-            }
-            .sidebar li {
-                margin-bottom: 10px;
-            }
-            .sidebar a {
-                color: #333;
-                text-decoration: none;
-                font-size: 1em;
-            }
-            .sidebar a:hover {
-                color: #667eea;
-            }
-            .main-content {
-                flex: 1;
-                background: white;
-                padding: 32px 32px 32px 32px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            }
-            h1 {
-                color: #333;
-                text-align: left;
-                font-size: 2.2em;
-                margin-bottom: 10px;
-            }
-            h2 {
-                color: #667eea;
-                margin-top: 32px;
-                font-size: 1.5em;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 16px;
-                margin-bottom: 24px;
-            }
-            th, td {
-                border: 1px solid #e0e0e0;
-                padding: 10px 8px;
-                text-align: left;
-            }
-            th {
-                background: #f7f7fa;
-                color: #667eea;
-                font-weight: 600;
-            }
-            .constant-table td {
-                font-family: monospace;
-            }
-            .code {
-                background: #f0f0f0;
-                padding: 10px;
-                border-radius: 4px;
-                font-family: monospace;
-                white-space: pre;
-                overflow-x: auto;
-                margin-bottom: 16px;
-            }
-            @media (max-width: 900px) {
-                .container {
-                    flex-direction: column;
-                    gap: 0;
-                }
-                .sidebar {
-                    margin-bottom: 24px;
-                    position: static;
-                }
-            }
+        /* Page-specific styles */
+        .constant-table td {
+            font-family: monospace;
+        }
+        .code {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
     </style>
 </head>
 <body>
