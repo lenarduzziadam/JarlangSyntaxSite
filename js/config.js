@@ -14,13 +14,13 @@ class SupabaseConfig {
             production: {
                 supabaseUrl: 'https://iiaytfagmiabwznwxgwx.supabase.co',
                 supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0',
-                adminPassword: 'admin123'
+                adminPassword: 'alexanderPoliceChad123'
             },
             // Development settings (same as production for now)
             development: {
                 supabaseUrl: 'https://iiaytfagmiabwznwxgwx.supabase.co',
                 supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpYXl0ZmFnbWlhYnd6bnd4Z3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMjE3OTUsImV4cCI6MjA3NzY5Nzc5NX0.WxgWhpto79wYwm3BbhRONCyGCDpG9EoZ3sXyDK1KFf0',
-                adminPassword: 'admin123'
+                adminPassword: 'alexanderPoliceChad123'
             }
         };
     }
