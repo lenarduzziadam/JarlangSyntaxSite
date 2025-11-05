@@ -270,7 +270,7 @@
 
             <section class="download-section" id="downloads">
                 <h2>🚀 Get Jarlang Runner</h2>
-                <p>Download the Jarlang interpreter and start coding with the warrior jar programming language!</p>
+                <p>Download the Jarlang interpreter and start coding with Jar Knight's tremendous programming language!</p>
                 
                 <div style="text-align: center; margin: 24px 0;">
                     <a href="https://drive.google.com/drive/u/3/folders/10LGzvXdpaqdqb5U4uXlYkFmuhvwXI82C" 
@@ -333,17 +333,18 @@
                     <div class="installation-step">
                         <h3>Download Jarlang Runner</h3>
                         <p>Download the Jarlang JAR file from the Google Drive link above. The main file you need is:</p>
-                        <div class="code-block">jarlang-runner.jar</div>
-                        <p>Place this file in a dedicated folder like <code>C:\jarlang\</code> or <code>~/jarlang/</code></p>
+                        <div class="code-block">jarlang.jar</div>
+                        <p>Keep this file in the JarlangExecutable folder <code>C:\..\JarlangExecutable\</code> or <code>~/../JarlangExecutable/</code></p>
                     </div>
 
                     <div class="installation-step">
-                        <h3>Run Your First Jarlang Program</h3>
-                        <p>Create a simple Jarlang program (<code>hello.jar</code>):</p>
-                        <div class="code-block">vessel main() {<br>    echo("Hello, warrior jar world!");<br>}</div>
-                        
-                        <p>Run it with the Jarlang interpreter:</p>
-                        <div class="code-block">java -jar jarlang-runner.jar hello.jar</div>
+                        <h3>Run Jarlang Shell REPL</h3>
+                        <p>Create a simple Jarlang program (<code>HelloWorld.vase</code>):</p>
+                        <div class="code-block">forge hello() {<br>    mend "Hello, warrior jar world!";<br>}<br><br>hello();</div>
+                        <p>Run within the Terminal:</p>
+                        <div class="code-block">java -jar jarlang.jar</div>
+                        <p>In the REPL, execute your program:</p>
+                        <div class="code-block">!run HelloWorld.vase</div>
                     </div>
 
                     <div class="installation-step">
@@ -351,13 +352,12 @@
                         <p>For easier access, add Jarlang to your system PATH or create an alias:</p>
                         
                         <p><strong>Windows (PowerShell):</strong></p>
-                        <div class="code-block">function jarlang { java -jar C:\path\to\jarlang-runner.jar $args }</div>
+                        <div class="code-block">function jarlang { java -jar C:\path\to\jarlang.jar $args }</div>
                         
                         <p><strong>macOS/Linux (Bash/Zsh):</strong></p>
-                        <div class="code-block">alias jarlang='java -jar ~/path/to/jarlang-runner.jar'</div>
-                        
-                        <p>Then you can run programs with just:</p>
-                        <div class="code-block">jarlang hello.jar</div>
+                        <div class="code-block">alias jarlang='java -jar ~/path/to/jarlang.jar'</div>
+                        <p>Now you can run Jarlang from any terminal location with one command:</p>
+                        <div class="code-block">jarlang</div>
                     </div>
                 </div>
             </section>
