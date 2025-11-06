@@ -364,4 +364,15 @@ pre {
     .main-content {
         padding: 18px 8px 24px 8px;
     }
+
+    /* Mobile-friendly navbar */
+    .navbar {
+        flex-wrap: wrap;
+        padding: 8px 4px;
+    }
+
+    .navbar a {
+        margin: 4px 8px;
+        font-size: 14px;
+    }
 }
