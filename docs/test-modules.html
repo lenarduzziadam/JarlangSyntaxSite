@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Module Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Module Test Page</h1>
+    <p>This page tests that all refactored JavaScript modules load and work correctly.</p>
+
+    <!-- Load Vue.js and Supabase -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Load our modules -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/utils.js"></script>
+    <script src="js/services/supabase-service.js"></script>
+    <script src="js/components/reports-app.js"></script>
+    <script src="js/components/admin-app.js"></script>
+
+    <div id="test-results">
+        <!-- Test results will be inserted here -->
+    </div>
+
+    <script>
+        // Test runner
+        const tests = [];
+        
+        function addTest(name, testFn) {
+            tests.push({ name, testFn });
+        }
+        
+        function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            let html = '<h2>Test Results</h2>';
+            
+            tests.forEach(test => {
+                try {
+                    const result = test.testFn();
+                    html += `<div class="test-section">
+                        <h3 class="success">✓ ${test.name}</h3>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>`;
+                } catch (error) {
+                    html += `<div class="test-section">
+                        <h3 class="error">✗ ${test.name}</h3>
+                        <pre class="error">Error: ${error.message}</pre>
+                    </div>`;
+                }
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Define tests
+        addTest('Config Module Loaded', () => {
+            if (!window.supabaseConfig) throw new Error('supabaseConfig not found');
+            return {
+                configured: window.supabaseConfig.isConfigured(),
+                environment: window.supabaseConfig.isDevelopment ? 'development' : 'production'
+            };
+        });
+        
+        addTest('Utils Module Loaded', () => {
+            if (!window.Utils) throw new Error('Utils not found');
+            const testDate = new Date('2023-01-01T12:00:00Z');
+            return {
+                formatDate: window.Utils.formatDate(testDate),
+                isValidEmail: window.Utils.isValidEmail('test@example.com'),
+                truncateText: window.Utils.truncateText('This is a long text', 10)
+            };
+        });
+        
+        addTest('SupabaseService Module Loaded', () => {
+            if (!window.SupabaseService) throw new Error('SupabaseService not found');
+            const service = new window.SupabaseService();
+            return {
+                configured: service.isConfigured(),
+                hasClient: !!service.getClient()
+            };
+        });
+        
+        addTest('ReportsApp Component Loaded', () => {
+            if (!window.ReportsApp) throw new Error('ReportsApp not found');
+            return {
+                hasData: typeof window.ReportsApp.data === 'function',
+                hasComputed: !!window.ReportsApp.computed,
+                hasMethods: !!window.ReportsApp.methods,
+                methodCount: Object.keys(window.ReportsApp.methods || {}).length
+            };
+        });
+        
+        addTest('AdminApp Component Loaded', () => {
+            if (!window.AdminApp) throw new Error('AdminApp not found');
+            return {
+                hasData: typeof window.AdminApp.data === 'function',
+                hasComputed: !!window.AdminApp.computed,
+                hasMethods: !!window.AdminApp.methods,
+                methodCount: Object.keys(window.AdminApp.methods || {}).length
+            };
+        });
+        
+        addTest('Vue.js Integration Test', () => {
+            if (!window.Vue) throw new Error('Vue.js not loaded');
+            
+            // Test creating a Vue app with our components
+            const testDiv = document.createElement('div');
+            testDiv.id = 'test-vue-app';
+            document.body.appendChild(testDiv);
+            
+            const { createApp } = Vue;
+            const app = createApp({
+                data() {
+                    return { message: 'Vue integration working!' };
+                },
+                template: '<div>{{ message }}</div>'
+            });
+            
+            app.mount('#test-vue-app');
+            
+            return {
+                vueVersion: Vue.version || 'Vue 3',
+                appMounted: true,
+                componentLoaded: !!window.ReportsApp
+            };
+        });
+        
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(runTests, 500); // Small delay to ensure all scripts loaded
+        });
+    </script>
+</body>
+</html>

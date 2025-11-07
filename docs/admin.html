@@ -11,6 +11,12 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <!-- Config -->
     <script src="js/config.js"></script>
+    <!-- Utils -->
+    <script src="js/utils/utils.js"></script>
+    <!-- Services -->
+    <script src="js/services/supabase-service.js"></script>
+    <!-- Components -->
+    <script src="js/components/admin-app.js"></script>
     
     <style>
         body {
@@ -239,14 +245,14 @@
             <form @submit.prevent="authenticate">
                 <div class="form-group">
                     <label>Admin Password:</label>
-                    <input type="password" v-model="password" required>
+                    <input type="password" v-model="password" placeholder="Enter admin password" required>
                 </div>
                 <button type="submit" class="btn btn-approve" style="width: 100%;" :disabled="authenticating">
                     {{ authenticating ? 'Checking...' : 'Access Admin Panel' }}
                 </button>
             </form>
             <p style="font-size: 12px; color: #666; margin-top: 16px;">
-                Default password: "admin123" is default for demo purposes.
+                Enter the configured admin password to access the panel.
             </p>
         </div>
 
@@ -361,280 +367,9 @@
     </div>
 
     <script>
+        // Initialize the Admin Vue.js application
         const { createApp } = Vue;
-        
-        // Initialize Supabase using config
-        const supabaseClient = window.supabaseConfig.getSupabaseClient();
-        const supabaseConfigured = window.supabaseConfig.isConfigured();
-        
-        // Log environment info
-        window.supabaseConfig.logEnvironment();
-
-        createApp({
-            data() {
-                return {
-                    authenticated: false,
-                    password: '',
-                    authenticating: false,
-                    authAlert: { show: false, type: '', message: '' },
-                    reports: [],
-                    loading: false,
-                    alert: { show: false, type: '', message: '' }
-                };
-            },
-            computed: {
-                totalReports() { return this.reports.length; },
-                pendingReports() { return this.reports.filter(r => r.status === 'pending_review').length; },
-                approvedReports() { return this.reports.filter(r => r.status === 'approved').length; },
-                rejectedReports() { return this.reports.filter(r => r.status === 'rejected').length; },
-                pendingReviewReports() { return this.reports.filter(r => r.status === 'pending_review'); },
-                recentReports() { return this.reports.filter(r => r.status !== 'pending_review').slice(0, 10); },
-                currentAdminPassword() { return window.supabaseConfig ? window.supabaseConfig.getAdminPassword() : 'admin123'; }
-            },
-            async mounted() {
-                // Check if already authenticated
-                if (localStorage.getItem('jarlang_admin_auth') === 'true') {
-                    this.authenticated = true;
-                    await this.loadReports();
-                }
-            },
-            methods: {
-                authenticate() {
-                    this.authenticating = true;
-                    
-                    // Simple password check (in production, use proper authentication)
-                    setTimeout(() => {
-                        if (this.password === window.supabaseConfig.getAdminPassword()) {
-                            this.authenticated = true;
-                            localStorage.setItem('jarlang_admin_auth', 'true');
-                            this.loadReports();
-                        } else {
-                            this.showAuthAlert('error', 'Invalid password');
-                        }
-                        this.authenticating = false;
-                    }, 1000);
-                },
-                
-                logout() {
-                    this.authenticated = false;
-                    this.password = '';
-                    localStorage.removeItem('jarlang_admin_auth');
-                },
-                
-                async loadReports() {
-                    this.loading = true;
-                    
-                    if (!supabaseClient) {
-                        // Demo data
-                        this.reports = [
-                            {
-                                id: 1, type: 'bug', title: 'Inappropriate language in title',
-                                description: 'This report contains inappropriate content that needs review.',
-                                created_at: new Date().toISOString(), status: 'pending_review',
-                                flagged: true, flagged_at: new Date().toISOString()
-                            },
-                            {
-                                id: 2, type: 'feature', title: 'Add new syntax feature',
-                                description: 'Would love to see more syntax options.',
-                                created_at: new Date(Date.now() - 86400000).toISOString(),
-                                status: 'approved', flagged: false
-                            }
-                        ];
-                        this.loading = false;
-                        return;
-                    }
-                    
-                    try {
-                        const { data, error } = await supabaseClient
-                            .from('jarlang_reports')
-                            .select('*')
-                            .order('created_at', { ascending: false });
-                            
-                        if (error) throw error;
-                        this.reports = data || [];
-                    } catch (error) {
-                        console.error('Error loading reports:', error);
-                        this.showAlert('error', 'Could not load reports');
-                    } finally {
-                        this.loading = false;
-                    }
-                },
-                
-                async approveReport(report) {
-                    report.processing = true;
-                    
-                    if (!supabaseClient) {
-                        setTimeout(() => {
-                            report.status = 'approved';
-                            report.processing = false;
-                            this.showAlert('success', 'Demo: Report approved');
-                        }, 1000);
-                        return;
-                    }
-                    
-                    try {
-                        const { error } = await supabaseClient
-                            .from('jarlang_reports')
-                            .update({ 
-                                status: 'approved',
-                                reviewed_by: 'admin',
-                                reviewed_at: new Date().toISOString()
-                            })
-                            .eq('id', report.id);
-                            
-                        if (error) throw error;
-                        
-                        report.status = 'approved';
-                        this.showAlert('success', 'Report approved successfully');
-                    } catch (error) {
-                        console.error('Error approving report:', error);
-                        this.showAlert('error', 'Could not approve report');
-                    } finally {
-                        report.processing = false;
-                    }
-                },
-                
-                async rejectReport(report) {
-                    report.processing = true;
-                    
-                    if (!supabaseClient) {
-                        setTimeout(() => {
-                            report.status = 'rejected';
-                            report.processing = false;
-                            this.showAlert('success', 'Demo: Report rejected');
-                        }, 1000);
-                        return;
-                    }
-                    
-                    try {
-                        const { error } = await supabaseClient
-                            .from('jarlang_reports')
-                            .update({ 
-                                status: 'rejected',
-                                reviewed_by: 'admin',
-                                reviewed_at: new Date().toISOString()
-                            })
-                            .eq('id', report.id);
-                            
-                        if (error) throw error;
-                        
-                        report.status = 'rejected';
-                        this.showAlert('success', 'Report rejected');
-                    } catch (error) {
-                        console.error('Error rejecting report:', error);
-                        this.showAlert('error', 'Could not reject report');
-                    } finally {
-                        report.processing = false;
-                    }
-                },
-                
-                async unflagReport(report) {
-                    report.processing = true;
-                    
-                    if (!supabaseClient) {
-                        setTimeout(() => {
-                            report.flagged = false;
-                            report.status = 'open';
-                            report.processing = false;
-                            this.showAlert('success', 'Demo: Flag removed');
-                        }, 1000);
-                        return;
-                    }
-                    
-                    try {
-                        const { error } = await supabaseClient
-                            .from('jarlang_reports')
-                            .update({ 
-                                flagged: false,
-                                status: 'open',
-                                reviewed_by: 'admin',
-                                reviewed_at: new Date().toISOString()
-                            })
-                            .eq('id', report.id);
-                            
-                        if (error) throw error;
-                        
-                        report.flagged = false;
-                        report.status = 'open';
-                        this.showAlert('success', 'Flag removed - report is now visible');
-                    } catch (error) {
-                        console.error('Error unflagging report:', error);
-                        this.showAlert('error', 'Could not remove flag');
-                    } finally {
-                        report.processing = false;
-                    }
-                },
-                
-                async deleteReport(report) {
-                    // Confirm deletion
-                    if (!confirm(`Are you sure you want to permanently delete the report "${report.title}"? This action cannot be undone.`)) {
-                        return;
-                    }
-                    
-                    report.processing = true;
-                    
-                    if (!supabaseClient) {
-                        setTimeout(() => {
-                            // Remove from local array in demo mode
-                            const index = this.reports.findIndex(r => r.id === report.id);
-                            if (index !== -1) {
-                                this.reports.splice(index, 1);
-                            }
-                            report.processing = false;
-                            this.showAlert('success', 'Demo: Report deleted');
-                        }, 1000);
-                        return;
-                    }
-                    
-                    try {
-                        const { error } = await supabaseClient
-                            .from('jarlang_reports')
-                            .delete()
-                            .eq('id', report.id);
-                            
-                        if (error) throw error;
-                        
-                        // Remove from local array
-                        const index = this.reports.findIndex(r => r.id === report.id);
-                        if (index !== -1) {
-                            this.reports.splice(index, 1);
-                        }
-                        
-                        this.showAlert('success', 'Report permanently deleted');
-                    } catch (error) {
-                        console.error('Error deleting report:', error);
-                        this.showAlert('error', 'Could not delete report');
-                    } finally {
-                        report.processing = false;
-                    }
-                },
-                
-                showAuthAlert(type, message) {
-                    this.authAlert = {
-                        show: true,
-                        type: type === 'success' ? 'alert-success' : 'alert-error',
-                        message
-                    };
-                    setTimeout(() => { this.authAlert.show = false; }, 3000);
-                },
-                
-                showAlert(type, message) {
-                    this.alert = {
-                        show: true,
-                        type: type === 'success' ? 'alert-success' : 'alert-error',
-                        message
-                    };
-                    setTimeout(() => { this.alert.show = false; }, 3000);
-                },
-                
-                formatDate(dateString) {
-                    if (!dateString) return 'Unknown time';
-                    const date = new Date(dateString);
-                    if (isNaN(date.getTime())) return 'Invalid date';
-                    return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
-                }
-            }
-        }).mount('#app');
+        createApp(window.AdminApp).mount('#app');
     </script>
 </body>
 </html>
