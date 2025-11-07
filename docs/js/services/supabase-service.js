@@ -188,8 +188,7 @@ class SupabaseService {
         }
         
         const updates = { 
-            status: status,
-            updated_at: new Date().toISOString()
+            status: status
         };
         
         // If approving a flagged report, unflag it

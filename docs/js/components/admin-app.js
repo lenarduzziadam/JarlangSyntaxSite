@@ -9,8 +9,6 @@ const AdminApp = {
             authenticated: false,
             authenticating: false,
             password: '',
-            reports: [],
-            loading: false,
             authAlert: {
                 show: false,
                 type: '',
@@ -21,6 +19,8 @@ const AdminApp = {
                 type: '',
                 message: ''
             },
+            reports: [],
+            loading: false,
             supabaseConfigured: false
         };
     },
@@ -34,12 +34,30 @@ const AdminApp = {
             return this.reports.filter(report => !report.flagged && report.status === 'active');
         },
         
+        // Stats (numbers for dashboard)
+        totalReports() {
+            return this.reports.length;
+        },
+        
+        pendingReports() {
+            return this.reports.filter(report => report.status === 'pending_review').length;
+        },
+        
         approvedReports() {
-            return this.reports.filter(report => report.status === 'approved');
+            return this.reports.filter(report => report.status === 'approved').length;
         },
         
         rejectedReports() {
-            return this.reports.filter(report => report.status === 'rejected');
+            return this.reports.filter(report => report.status === 'rejected').length;
+        },
+        
+        // Arrays (for listing reports)
+        pendingReviewReports() {
+            return this.reports.filter(report => report.status === 'pending_review');
+        },
+        
+        recentReports() {
+            return this.reports.filter(report => report.status !== 'pending_review').slice(0, 10);
         },
         
         currentAdminPassword() {
@@ -47,7 +65,7 @@ const AdminApp = {
         }
     },
     
-    async mounted() {
+    mounted() {
         // Initialize Supabase service
         this.supabaseService = new window.SupabaseService();
         this.supabaseConfigured = this.supabaseService.isConfigured();
@@ -56,7 +74,9 @@ const AdminApp = {
         const isAuth = sessionStorage.getItem('jarlang_admin_auth');
         if (isAuth === 'true') {
             this.authenticated = true;
-            await this.loadAllReports();
+            this.loadAllReports().catch(error => {
+                console.error('Error loading reports on mount:', error);
+            });
         }
     },
     
@@ -128,6 +148,34 @@ const AdminApp = {
             } catch (error) {
                 console.error('Error updating report:', error);
                 this.showAlert('error', `Failed to update report status: ${error.message}`);
+            } finally {
+                report.updating = false;
+            }
+        },
+        
+        async approveReport(report) {
+            await this.updateReportStatus(report, 'approved');
+        },
+        
+        async rejectReport(report) {
+            await this.updateReportStatus(report, 'rejected');
+        },
+        
+        async unflagReport(report) {
+            report.updating = true;
+            
+            try {
+                await this.supabaseService.updateReportStatus(report.id, 'active');
+                
+                // Update local state
+                report.flagged = false;
+                report.status = 'active';
+                
+                this.showAlert('success', 'Report unflagged and made active.');
+                
+            } catch (error) {
+                console.error('Error unflagging report:', error);
+                this.showAlert('error', `Failed to unflag report: ${error.message}`);
             } finally {
                 report.updating = false;
             }
