@@ -62,6 +62,19 @@
             background: rgba(255,255,255,0.3);
             border-color: rgba(255,255,255,0.5);
         }
+        .filter-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .filter-control select {
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background: white;
+        }
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -264,6 +277,15 @@
                 <button @click="logout" class="logout-btn">
                     Logout
                 </button>
+            </div>
+
+            <div class="filter-control">
+                <label for="report-filter">Filter by type</label>
+                <select id="report-filter" v-model="filterType">
+                    <option v-for="type in filterOptions" :key="type" :value="type">
+                        {{ type }}
+                    </option>
+                </select>
             </div>
 
             <div v-if="alert.show" :class="['alert', alert.type]">

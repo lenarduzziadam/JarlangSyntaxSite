@@ -21,45 +21,55 @@ const AdminApp = {
             },
             reports: [],
             loading: false,
-            supabaseConfigured: false
+            supabaseConfigured: false,
+            filterType: 'all'
         };
     },
     
     computed: {
+        filterOptions() {
+            return ['all', 'bug', 'feature', 'improvement'];
+        },
+
+        filteredReports() {
+            if (this.filterType === 'all') return this.reports;
+            return this.reports.filter(report => report.type === this.filterType);
+        },
+
         flaggedReports() {
-            return this.reports.filter(report => report.flagged);
+            return this.filteredReports.filter(report => report.flagged);
         },
-        
+
         activeReports() {
-            return this.reports.filter(report => !report.flagged && report.status === 'active');
+            return this.filteredReports.filter(report => !report.flagged && report.status === 'active');
         },
-        
+
         // Stats (numbers for dashboard)
         totalReports() {
-            return this.reports.length;
+            return this.filteredReports.length;
         },
-        
+
         pendingReports() {
-            return this.reports.filter(report => report.status === 'pending_review').length;
+            return this.filteredReports.filter(report => report.status === 'pending_review').length;
         },
-        
+
         approvedReports() {
-            return this.reports.filter(report => report.status === 'approved').length;
+            return this.filteredReports.filter(report => report.status === 'approved').length;
         },
-        
+
         rejectedReports() {
-            return this.reports.filter(report => report.status === 'rejected').length;
+            return this.filteredReports.filter(report => report.status === 'rejected').length;
         },
-        
+
         // Arrays (for listing reports)
         pendingReviewReports() {
-            return this.reports.filter(report => report.status === 'pending_review');
+            return this.filteredReports.filter(report => report.status === 'pending_review');
         },
-        
+
         recentReports() {
-            return this.reports.filter(report => report.status !== 'pending_review').slice(0, 10);
+            return this.filteredReports.filter(report => report.status !== 'pending_review').slice(0, 10);
         },
-        
+
         currentAdminPassword() {
             return window.supabaseConfig ? window.supabaseConfig.getAdminPassword() : 'admin123';
         }
